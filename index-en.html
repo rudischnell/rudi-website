@@ -5,24 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="rudischnell.studio – Logo design, graphic design and creative workshops for organizations and educational institutions.">
     <title>rudischnell.studio</title>
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="apple-touch-icon" href="images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png?v=2">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16.png?v=2">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/favicon-180.png?v=2">
     <link rel="stylesheet" href="style.css">
+    <link rel="preload" href="images/logo-dark.png" as="image">
+    <link rel="preload" href="images/logo-light.png" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Righteous&display=swap" as="style">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Righteous&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 </head>
-<body>
+<body class="page-index">
+    <div class="page-gradient" aria-hidden="true"></div>
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <a href="#hero" class="nav-logo"><img src="images/logo-dark.png" alt="Rudi Schnell Studio Logo" width="180" class="logo-dark"><img src="images/logo-light.png" alt="Rudi Schnell Studio Logo" width="180" class="logo-light"></a>
+            <a href="#hero" class="nav-logo"><img src="images/logo-dark.png" alt="Rudi Schnell Studio Logo" class="logo-dark"><img src="images/logo-light.png" alt="Rudi Schnell Studio Logo" class="logo-light"></a>
             <ul class="nav-links" id="nav-links">
                 <li><a href="#services">Services</a></li>
                 <li><a href="#portfolio">Portfolio</a></li>
-                <li><a href="blog.html">Podcast</a></li>
-                <li><a href="shop.html">Shop</a></li>
                 <li><a href="#contact">Contact</a></li>
                 <li><a href="#about">About</a></li>
+                <!-- <li><a href="blog.html">Podcast</a></li> -->
+                <!-- <li><a href="shop.html">Shop</a></li> -->
+                <li class="theme-toggle-mobile"><button class="theme-toggle" id="theme-toggle-mobile" aria-label="Toggle color mode"><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></li>
+                <li class="lang-switcher-mobile"><a href="index.html">DE</a><span class="lang-divider">|</span><a href="index-en.html" class="lang-active">EN</a></li>
             </ul>
             <div class="lang-switcher">
                 <a href="index.html">DE</a>
@@ -43,12 +51,245 @@
 
     <section class="hero" id="hero">
         <div class="hero-content">
-            <p class="hero-tagline">Design &middot; Workshops &middot; Media Production</p>
-            <h1>Im <span class="hero-accent">Studio</span> mit Rudi!</h1>
-            <p class="hero-description">Creative design and hands-on workshops for organizations, educational institutions, and young people.</p>
+            <p class="hero-tagline" id="hero-tagline">CONCEPT &middot; GRAPHICS &middot; PRINT</p>
+            <h1 id="hero-title">CREATIVE FOR YOU!</h1>
+            <p class="hero-description">Fresh design and hands-on workshops for organizations, educational institutions, and everyone who publishes.</p>
             <div class="hero-buttons">
-                <a href="#services" class="btn btn-primary">My Services</a>
-                <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+                <a href="#services" class="btn btn-primary">Services</a>
+                <a href="#contact" class="btn btn-secondary">Message!</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Services</p>
+                <h2>What I Do</h2>
+            </div>
+            <div class="services-grid">
+                <div class="service-card" data-subject="Workshop Inquiry">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3>Workshops for Youth Work</h3>
+                    <p class="service-summary">Media education workshops for organizations, schools and educational institutions.</p>
+                    <div class="service-details">
+                        <div>
+                            <p>Graffiti, lettering, mobile music production with iPads, podcast, radio, graphic &amp; layout basics. Single sessions, workshop series or project days – equipment provided on request.</p>
+                            <a href="#contact" class="btn btn-primary btn-service">Book a workshop</a>
+                        </div>
+                    </div>
+                    <span class="service-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+                <div class="service-card" data-subject="Graphic Design">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                            <rect x="3" y="3" width="18" height="18" rx="2"/>
+                            <circle cx="8.5" cy="8.5" r="1.5"/>
+                            <path d="M21 15l-5-5L5 21"/>
+                        </svg>
+                    </div>
+                    <h3>Graphic Design &amp; Print Support</h3>
+                    <p class="service-summary">From the first idea to the finished product in your hands.</p>
+                    <div class="service-details">
+                        <div>
+                            <p>Poster designs, flyers, stickers, merchandise – I create print-ready files and guide the entire production process: quotes, revision rounds, quality checks. You don't just get designs, you get finished print products.</p>
+                            <a href="#contact" class="btn btn-primary btn-service">Request a design</a>
+                        </div>
+                    </div>
+                    <span class="service-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+                <div class="service-card" data-subject="Web Design">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <path d="M8 21h8M12 17v4"/>
+                        </svg>
+                    </div>
+                    <h3>Web Design</h3>
+                    <p class="service-summary">Modern, responsive websites – honestly made.</p>
+                    <div class="service-details">
+                        <div>
+                            <p>This website? Built with Claude Code. If you like it, I can either build your own or show you how it works – so you can manage and evolve it yourself.</p>
+                            <a href="#contact" class="btn btn-primary btn-service">Request a website</a>
+                        </div>
+                    </div>
+                    <span class="service-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+                <div class="service-card" data-subject="Other">
+                    <div class="service-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <h3>Individual Projects</h3>
+                    <p class="service-summary">Creative projects, campaigns and entirely new formats.</p>
+                    <div class="service-details">
+                        <div>
+                            <p>From illustrations to social media graphics to experimental formats – get in touch for your creative project! Also campaigns: concept, project management and visual execution, all in one.</p>
+                            <a href="#contact" class="btn btn-primary btn-service">Discuss a project</a>
+                        </div>
+                    </div>
+                    <span class="service-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20"><polyline points="6 9 12 15 18 9"/></svg></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="portfolio" id="portfolio">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Portfolio</p>
+                <h2>Selected Works</h2>
+            </div>
+            <div class="carousel">
+                <div class="carousel-track-wrapper">
+                    <div class="carousel-track">
+                        <!-- Ché project: uncomment when approved
+                        <div class="carousel-slide" onclick="openLightbox(this)">
+                            <div class="portfolio-image">
+                                <img src="images/portfolio/che-logo-2026-thumb.png" alt="Logo Design for rapper Ché" loading="lazy">
+                                <div class="portfolio-overlay"><span>View project</span></div>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Logo Design – Ch&eacute;</h3>
+                                <p>Visual identity for rapper Ch&eacute;</p>
+                                <div class="portfolio-tags">
+                                    <span class="tag">Logo Design</span>
+                                    <span class="tag">Hip-Hop</span>
+                                </div>
+                            </div>
+                            <img src="images/portfolio/che-logo-2026.png" alt="Logo Design for rapper Ché – full view" class="portfolio-full" hidden>
+                            <img src="images/portfolio/che-logo.png" alt="Logo Design for rapper Ché – version 2" class="portfolio-full" hidden>
+                        </div>
+                        -->
+                        <div class="carousel-slide">
+                            <div class="portfolio-image portfolio-placeholder">
+                                <span>Project coming soon</span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Coming Soon</h3>
+                                <p>New project in progress</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="portfolio-image portfolio-placeholder">
+                                <span>Project 2</span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Coming Soon</h3>
+                                <p>New project in progress</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="portfolio-image portfolio-placeholder">
+                                <span>Project 3</span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Coming Soon</h3>
+                                <p>New project in progress</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="portfolio-image portfolio-placeholder">
+                                <span>Project 4</span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Coming Soon</h3>
+                                <p>New project in progress</p>
+                            </div>
+                        </div>
+                        <div class="carousel-slide">
+                            <div class="portfolio-image portfolio-placeholder">
+                                <span>Project 5</span>
+                            </div>
+                            <div class="portfolio-info">
+                                <h3>Coming Soon</h3>
+                                <p>New project in progress</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-btn carousel-next" aria-label="Next">&#8250;</button>
+                <div class="carousel-dots"></div>
+            </div>
+        </div>
+    </section>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+        <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
+        <button class="lightbox-prev" id="lightbox-prev" aria-label="Previous image">&#8249;</button>
+        <button class="lightbox-next" id="lightbox-next" aria-label="Next image">&#8250;</button>
+        <div class="lightbox-content">
+            <img id="lightbox-img" src="" alt="">
+            <div class="lightbox-counter" id="lightbox-counter"></div>
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-desc"></p>
+            </div>
+        </div>
+    </div>
+
+    <button class="scroll-top" id="scroll-top" aria-label="Scroll to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><polyline points="18 15 12 9 6 15"/></svg>
+    </button>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-header">
+                <p class="section-label">Contact</p>
+                <h2>Drop me a message!</h2>
+                <p class="section-description">Need a design or want to book a workshop? Write me – I'll get back to you soon.</p>
+            </div>
+            <form class="contact-form" id="contact-form" action="https://formspree.io/f/xjgerlnn" method="POST">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" name="name" required placeholder="Your name" minlength="2">
+                        <span class="form-error" id="error-name">Please enter your name.</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your@email.com" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}">
+                        <span class="form-error" id="error-email">Please enter a valid email address.</span>
+                        <div class="disposable-warning" id="disposable-warning">
+                            <span>Is your address correct?</span>
+                            <button type="button" class="btn-disposable btn-disposable-ja" id="disposable-ja">Yes</button>
+                            <button type="button" class="btn-disposable btn-disposable-nein" id="disposable-nein">No</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <select id="subject" name="subject" required>
+                        <option value="">Please select...</option>
+                        <option value="Logo & Corporate Design">Logo &amp; Corporate Design</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Workshop Inquiry">Workshop Inquiry</option>
+                        <option value="Web Design">Web Design</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span class="form-error" id="error-subject">Please select a subject.</span>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required minlength="3" placeholder="Tell me about your project..."></textarea>
+                    <span class="form-error" id="error-message">I'll need a bit more than that!</span>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full" id="contact-submit" disabled>Send message</button>
+            </form>
+            <div class="form-success" id="form-success">
+                <svg viewBox="0 0 52 52" class="form-success-icon">
+                    <circle cx="26" cy="26" r="24" fill="none" stroke="#4ade80" stroke-width="2.5" stroke-dasharray="151" stroke-dashoffset="151" class="success-circle"/>
+                    <polyline points="16 27 23 34 37 19" fill="none" stroke="#4ade80" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="36" stroke-dashoffset="36" class="success-check"/>
+                </svg>
+                <h3>Message sent!</h3>
+                <p>Thanks for your message. I'll get back to you as soon as possible.</p>
             </div>
         </div>
     </section>
@@ -61,155 +302,28 @@
             </div>
             <div class="about-grid">
                 <div class="about-text">
-                    <p>As a design technician, I combine creative design with workshop experience. Since 2023, I've been leading creative workshops for youth organizations – from graffiti to podcast production and beatmaking.</p>
-                    <p>My practice includes mobile beatmaking workshops for 10-14 year olds (iPad/Caustic3), radio and moderation formats, as well as graphic design for youth projects.</p>
-                    <p>Whether one-time project days or workshop series: The concepts are ready, the equipment is here. Let's discuss your next creative project!</p>
-                    <div class="about-tags">
-                        <span class="tag">Design Technician</span>
-                        <span class="tag">Educator Training</span>
-                        <span class="tag">Workshop Facilitation</span>
-                        <span class="tag">Media Production</span>
-                    </div>
+                    <p>As a design technician, I combine creative design with workshop experience. Since 2023, I've been leading creative workshops for youth organizations and independent institutions – from graffiti to podcast production and beatmaking.</p>
+                    <p>My practice includes mobile beatmaking workshops for young people (with iPad and Caustic 3), radio and moderation formats, as well as graphic design for youth projects (with Clip Studio Paint and Affinity Suite).</p>
+                    <p>Whether for project days or your design commission:<br><a href="#contact" class="about-cta">Feel free to reach out!</a></p>
                 </div>
                 <div class="about-stats">
                     <div class="stat-card">
-                        <span class="stat-icon">&#9998;</span>
+                        <i data-lucide="pen-tool" class="stat-icon"></i>
                         <h3>Design</h3>
                         <p>From logos to layouts – thoughtful visual communication</p>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-icon">&#9734;</span>
+                        <i data-lucide="users" class="stat-icon"></i>
                         <h3>Workshops</h3>
                         <p>Creative formats for young audiences</p>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-icon">&#9835;</span>
+                        <i data-lucide="mic" class="stat-icon"></i>
                         <h3>Media</h3>
                         <p>Radio, podcast, beats – digital media work</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Services</p>
-                <h2>What I Offer</h2>
-            </div>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
-                    </div>
-                    <h3>Workshops for Youth Work</h3>
-                    <p>Media education workshops for youth organizations, schools and educational institutions: Graffiti &amp; Lettering, Beatmaking &amp; Music Production (iPad/Caustic3), Podcast &amp; Radio Moderation, Graphic &amp; Layout Basics. Single sessions, project days or workshop series – including technology and materials on request.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            <circle cx="8.5" cy="8.5" r="1.5"/>
-                            <path d="M21 15l-5-5L5 21"/>
-                        </svg>
-                    </div>
-                    <h3>Graphic Design &amp; Print Support</h3>
-                    <p>Poster designs, flyers, stickers, merchandise motifs – from the first idea to the finished product in your hands. I create print-ready files and guide you through the entire production process: getting quotes, coordinating correction loops, checking quality. You don't just get designs, but working print products.</p>
-                </div>
-                <div class="service-card">
-                    <div class="service-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="32" height="32">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                    </div>
-                    <h3>Individual Projects</h3>
-                    <p>From illustrations to social media graphics to experimental formats – contact me for your creative project! I'm also the right person for campaign support: concept, project management and visual implementation all in one.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="portfolio" id="portfolio">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Portfolio</p>
-                <h2>Selected Works</h2>
-            </div>
-            <div class="portfolio-grid">
-
-                <div class="portfolio-item" onclick="openLightbox(this)">
-                    <div class="portfolio-image">
-                        <img src="images/portfolio/che-logo-thumb.png" alt="Logo Design for rapper Ché" loading="lazy">
-                        <div class="portfolio-overlay">
-                            <span>View project</span>
-                        </div>
-                    </div>
-                    <div class="portfolio-info">
-                        <h3>Logo Design – Ché</h3>
-                        <p>Developing a visual identity for rapper Ché – from initial concept through multiple iterations to the final logo. Focus on clear typography and recognition value for social media and print.</p>
-                        <div class="portfolio-tags">
-                            <span class="tag">Logo Design</span>
-                            <span class="tag">Hip-Hop</span>
-                            <span class="tag">Typography</span>
-                        </div>
-                    </div>
-                    <img src="images/portfolio/che-logo.png" alt="Logo Design for rapper Ché – full view" class="portfolio-full" hidden>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-        <button class="lightbox-close" onclick="closeLightbox(event)" aria-label="Close">&times;</button>
-        <div class="lightbox-content">
-            <img id="lightbox-img" src="" alt="">
-            <div class="lightbox-info">
-                <h3 id="lightbox-title"></h3>
-                <p id="lightbox-desc"></p>
-            </div>
-        </div>
-    </div>
-
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <p class="section-label">Contact</p>
-                <h2>Let's Work Together</h2>
-                <p class="section-description">Need a design or want to book a workshop? Write me – I'll get back to you soon.</p>
-            </div>
-            <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Name</label>
-                        <input type="text" id="name" name="name" required placeholder="Your name">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required placeholder="your@email.com">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject</label>
-                    <select id="subject" name="subject">
-                        <option value="">Please select...</option>
-                        <option value="Logo & Corporate Design">Logo &amp; Corporate Design</option>
-                        <option value="Graphic Design">Graphic Design</option>
-                        <option value="Workshop Inquiry">Workshop Inquiry</option>
-                        <option value="Other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="5" required placeholder="Tell me about your project..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-full">Send Message</button>
-            </form>
         </div>
     </section>
 
@@ -220,7 +334,7 @@
                 <p class="footer-tagline">rudischnell.studio – Design &amp; Workshops</p>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 rudischnell.studio. All rights reserved. <span class="footer-divider">|</span> <a href="impressum-en.html">Legal Notice</a></p>
+                <p>&copy; 2026 rudischnell.studio. All rights withheld. <span class="footer-divider">|</span> <a href="impressum-en.html">Legal Notice</a> <span class="footer-divider">|</span> <span class="footer-lang"><a href="index.html">DE</a><span class="lang-divider">|</span><a href="index-en.html" class="lang-active">EN</a></span></p>
             </div>
         </div>
     </footer>
@@ -231,5 +345,6 @@
     </div>
 
     <script src="script.js"></script>
+    <script>lucide.createIcons();</script>
 </body>
 </html>
