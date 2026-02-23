@@ -699,20 +699,25 @@ if (scrollTopBtn) {
         if (velocity < 0.5 || Math.abs(diffY) < 60) return;
 
         var scrollY = window.scrollY;
+        var viewH = window.innerHeight;
         var target = null;
 
         if (diffY > 0) {
-            // Swipe up → find next section below current position
+            // Swipe up → find next section, but only if it's already
+            // partially visible (entering the viewport from below)
             for (var i = 0; i < sections.length; i++) {
-                if (sections[i].offsetTop > scrollY + 10) {
+                var secTop = sections[i].offsetTop;
+                if (secTop > scrollY + 10 && secTop < scrollY + viewH) {
                     target = sections[i];
                     break;
                 }
             }
         } else {
-            // Swipe down → find previous section above current position
+            // Swipe down → find previous section, but only if current
+            // section top is visible (we're near the top of it)
             for (var i = sections.length - 1; i >= 0; i--) {
-                if (sections[i].offsetTop < scrollY - 10) {
+                var secBottom = sections[i].offsetTop + sections[i].offsetHeight;
+                if (secBottom < scrollY + viewH && sections[i].offsetTop < scrollY - 10) {
                     target = sections[i];
                     break;
                 }
