@@ -2116,6 +2116,7 @@ body {
 @media (max-width: 1024px) {
     html {
         scroll-snap-type: y mandatory;
+        scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
 
@@ -2128,6 +2129,11 @@ body {
         scroll-snap-stop: always;
         min-height: 100vh;
         min-height: 100dvh;
+        padding-top: calc(24px + env(safe-area-inset-top, 0px));
+    }
+
+    .hero {
+        padding-top: 0;
     }
 
     .footer {
@@ -2156,6 +2162,7 @@ body {
 
     .nav-toggle-floating {
         display: flex;
+        flex-direction: column;
         position: fixed;
         top: 16px;
         top: calc(16px + env(safe-area-inset-top, 0px));
