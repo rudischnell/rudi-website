@@ -742,6 +742,12 @@ body {
     border-radius: var(--radius);
     mask-image: linear-gradient(to right, black 0%, black 96%, transparent);
     -webkit-mask-image: linear-gradient(to right, black 0%, black 96%, transparent);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.carousel-track-wrapper::-webkit-scrollbar {
+    display: none;
 }
 
 .carousel-track {
@@ -2103,6 +2109,17 @@ body {
         left: 12px;
         bottom: 12px;
         max-width: none;
+    }
+
+    .scroll-top {
+        bottom: 80px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+
+    .scroll-top.visible {
+        opacity: 0.5;
     }
 }
 

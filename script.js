@@ -237,9 +237,10 @@ window.addEventListener('pagehide', forceScrollTop);
 
             // Mobile: scroll opened card to top of screen
             if (isSingleOrTwoCol() && !wasActive) {
+                // Wait for previous card collapse animation to finish
                 setTimeout(function() {
                     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 50);
+                }, 350);
                 return;
             }
 
@@ -420,8 +421,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     var isMoving = false;
     var isMobile = function() { return window.innerWidth <= 1024; };
 
-    // Clone slides for infinite loop (3 sets for mobile free-scroll)
-    var cloneSets = 3;
+    // Clone slides for infinite loop (prepend + append sets)
+    var cloneSets = 4;
+    // Append clones after originals
     for (var s = 0; s < cloneSets; s++) {
         for (var c = 0; c < total; c++) {
             var clone = slides[c].cloneNode(true);
@@ -429,12 +431,23 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
             track.appendChild(clone);
         }
     }
+    // Prepend clones before originals (for backward scrolling on mobile)
+    for (var s = 0; s < cloneSets; s++) {
+        for (var c = total - 1; c >= 0; c--) {
+            var clone = slides[c].cloneNode(true);
+            clone.classList.add('clone');
+            track.insertBefore(clone, track.firstChild);
+        }
+    }
+    var prependedCount = cloneSets * total;
 
     // === Desktop: JS-based carousel ===
     function getSlideOffset(index) {
         var allSlides = track.querySelectorAll('.carousel-slide');
-        if (index <= 0 || !allSlides.length) return 0;
-        var target = allSlides[Math.min(index, allSlides.length - 1)];
+        // Desktop uses original slides (after prepended clones)
+        var adjustedIndex = index + prependedCount;
+        if (adjustedIndex <= 0 || !allSlides.length) return 0;
+        var target = allSlides[Math.min(adjustedIndex, allSlides.length - 1)];
         return target.offsetLeft - allSlides[0].offsetLeft;
     }
 
@@ -512,6 +525,22 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     if (prevBtn) prevBtn.addEventListener('click', prev);
 
     // === Mobile: Free native scroll with infinite loop reset ===
+    function getOneSetWidth() {
+        var allSlides = track.querySelectorAll('.carousel-slide');
+        var w = 0;
+        for (var i = 0; i < total; i++) {
+            w += allSlides[i].offsetWidth + 20;
+        }
+        return w;
+    }
+
+    function getOriginOffset() {
+        // Offset to the first original slide (after prepended clones)
+        var allSlides = track.querySelectorAll('.carousel-slide');
+        if (prependedCount >= allSlides.length) return 0;
+        return allSlides[prependedCount].offsetLeft;
+    }
+
     function setupMobileScroll() {
         if (!isMobile()) {
             wrapper.style.overflowX = '';
@@ -519,28 +548,20 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
             setPos(pos, false);
             return;
         }
-        // Enable native horizontal scroll on mobile
         wrapper.style.overflowX = 'auto';
         wrapper.style.webkitOverflowScrolling = 'touch';
         track.style.transition = 'none';
         track.style.transform = 'none';
 
-        // Position at first clone set so user can scroll both directions
-        var oneSetWidth = 0;
-        var allSlides = track.querySelectorAll('.carousel-slide');
-        for (var i = 0; i < total; i++) {
-            oneSetWidth += allSlides[i].offsetWidth + 20; // 20 = gap
-        }
-        // Start at position of first original set
-        if (wrapper.scrollLeft < 10) {
-            wrapper.scrollLeft = 0;
-        }
+        // Start at the original slides (middle of the cloned track)
+        wrapper.scrollLeft = getOriginOffset();
     }
 
     // Infinite loop reset + dot tracking on mobile scroll
     var scrollTimeout;
+    var isResetting = false;
     wrapper.addEventListener('scroll', function() {
-        if (!isMobile()) return;
+        if (!isMobile() || isResetting) return;
 
         // Update dots based on which slide is most visible
         var allSlides = track.querySelectorAll('.carousel-slide');
@@ -564,16 +585,23 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         // Infinite loop reset after scroll stops
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
-            var oneSetWidth = 0;
-            for (var i = 0; i < total; i++) {
-                oneSetWidth += allSlides[i].offsetWidth + 20;
-            }
-            var totalWidth = track.scrollWidth;
+            var oneSetWidth = getOneSetWidth();
+            var originOff = getOriginOffset();
+            var scrollPos = wrapper.scrollLeft;
             var viewWidth = wrapper.clientWidth;
+            var totalWidth = track.scrollWidth;
 
-            // Reset to equivalent position when near ends
-            if (scrollPos + viewWidth >= totalWidth - 50) {
+            // If scrolled too far right, jump back by one set
+            if (scrollPos + viewWidth >= totalWidth - oneSetWidth) {
+                isResetting = true;
                 wrapper.scrollLeft = scrollPos - oneSetWidth;
+                isResetting = false;
+            }
+            // If scrolled too far left, jump forward by one set
+            else if (scrollPos < originOff - oneSetWidth * 2) {
+                isResetting = true;
+                wrapper.scrollLeft = scrollPos + oneSetWidth;
+                isResetting = false;
             }
         }, 150);
     });
