@@ -648,8 +648,8 @@ window.addEventListener('scroll', () => {
     }
     // Show/hide scroll-to-top button after 35% of page
     if (scrollTopBtn) {
-        var halfway = (document.documentElement.scrollHeight - window.innerHeight) * 0.35;
-        scrollTopBtn.classList.toggle('visible', window.scrollY > halfway);
+        var heroEnd = window.innerHeight;
+        scrollTopBtn.classList.toggle('visible', window.scrollY > heroEnd);
     }
     // Mobile: hide navbar after scrolling past hero, show floating burger
     if (isMobileNav()) {
