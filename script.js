@@ -1,12 +1,52 @@
 // Page load – ensure body is always visible (safety net)
 document.body.style.opacity = '1';
 
-// Always scroll to top on page load/refresh
+// Always scroll to top on page load/refresh (Safari-hardened)
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
+
+// Temporarily disable scroll-snap so Safari doesn't snap to a random section
+// while restoring scroll position during page load
+document.documentElement.style.scrollSnapType = 'none';
 window.scrollTo(0, 0);
-window.addEventListener('beforeunload', function() { window.scrollTo(0, 0); });
-document.addEventListener('DOMContentLoaded', function() { window.scrollTo(0, 0); });
-window.addEventListener('load', function() { window.scrollTo(0, 0); });
+
+function forceScrollTop() {
+    window.scrollTo(0, 0);
+}
+
+// Safari ignores scrollRestoration and restores scroll AFTER load,
+// so we force-reset with multiple strategies:
+document.addEventListener('DOMContentLoaded', forceScrollTop);
+window.addEventListener('load', function() {
+    forceScrollTop();
+    // Re-enable scroll-snap after Safari has finished its scroll restoration
+    setTimeout(function() {
+        document.documentElement.style.scrollSnapType = '';
+        forceScrollTop();
+    }, 200);
+});
+
+// Safari bfcache: pageshow fires when restoring from back-forward cache
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+        // Page was restored from bfcache – disable snap, reset, re-enable
+        document.documentElement.style.scrollSnapType = 'none';
+        forceScrollTop();
+        setTimeout(function() {
+            document.documentElement.style.scrollSnapType = '';
+            forceScrollTop();
+        }, 200);
+    }
+    forceScrollTop();
+    setTimeout(forceScrollTop, 0);
+    setTimeout(forceScrollTop, 50);
+    setTimeout(forceScrollTop, 120);
+});
+
+// beforeunload: set scroll to 0 so Safari's restoration target is top
+window.addEventListener('beforeunload', forceScrollTop);
+
+// pagehide: Safari counterpart – reset before page enters bfcache
+window.addEventListener('pagehide', forceScrollTop);
 
 // Pre-select contact subject from URL parameter (e.g. ?subject=Shop-Anfrage)
 (function() {
