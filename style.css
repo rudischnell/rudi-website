@@ -1938,7 +1938,7 @@ body {
 }
 
 /* ===== Responsive: Navbar + Lang-Switcher ===== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .lang-switcher {
         display: none;
     }
@@ -2175,7 +2175,7 @@ body {
 }
 
 /* ===== Mobile: Scroll-Snap (soft proximity) ===== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     html {
         scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
@@ -2211,7 +2211,7 @@ body {
     display: none;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .navbar.nav-hidden {
         transform: translateY(-100%);
         opacity: 0;
@@ -2284,7 +2284,7 @@ body {
 }
 
 /* ===== Mobile: Hide carousel arrow buttons ===== */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .carousel-btn {
         display: none !important;
     }

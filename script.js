@@ -375,7 +375,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         if (!target) return;
         e.preventDefault();
 
-        var mobile = window.innerWidth <= 1024;
+        var mobile = window.innerWidth <= 768;
         var headerOffset = mobile ? 0 : 88;
         var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
 
@@ -416,7 +416,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     var total = slides.length;
     var pos = 0;
     var isMoving = false;
-    var isMobile = function() { return window.innerWidth <= 1024; };
+    var isMobile = function() { return window.innerWidth <= 768; };
 
     // Clone slides for infinite loop (prepend + append sets)
     var cloneSets = 4;
@@ -635,7 +635,7 @@ document.querySelectorAll('.nav-links a, .nav-logo, .footer-bottom a, .lang-swit
 // Navbar scroll effect + scroll-to-top button + mobile navbar hide
 const navbar = document.getElementById('navbar');
 var scrollTopBtn = document.getElementById('scroll-top');
-var isMobileNav = function() { return window.innerWidth <= 1024; };
+var isMobileNav = function() { return window.innerWidth <= 768; };
 
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
@@ -680,13 +680,13 @@ if (scrollTopBtn) {
     var touchStartY = 0, touchStartTime = 0;
 
     document.addEventListener('touchstart', function(e) {
-        if (window.innerWidth > 1024) return;
+        if (window.innerWidth > 768) return;
         touchStartY = e.touches[0].clientY;
         touchStartTime = Date.now();
     }, { passive: true });
 
     document.addEventListener('touchend', function(e) {
-        if (window.innerWidth > 1024) return;
+        if (window.innerWidth > 768) return;
         var touchEndY = e.changedTouches[0].clientY;
         var diffY = touchStartY - touchEndY; // positive = swipe up
         var elapsed = Date.now() - touchStartTime;
