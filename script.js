@@ -235,12 +235,9 @@ window.addEventListener('pagehide', forceScrollTop);
             cards.forEach(function(c) { if (c !== card) c.classList.remove('active'); });
             card.classList.toggle('active', !wasActive);
 
-            // Mobile: scroll opened card to top of screen
+            // Mobile: scroll opened card to top of screen (simultaneously with open)
             if (isSingleOrTwoCol() && !wasActive) {
-                // Wait for previous card collapse animation to finish
-                setTimeout(function() {
-                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 350);
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 return;
             }
 
