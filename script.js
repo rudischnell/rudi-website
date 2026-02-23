@@ -674,6 +674,62 @@ if (scrollTopBtn) {
     });
 }
 
+// Mobile: Swipe boost – accelerate toward next/prev section on fast swipe
+(function() {
+    if (typeof window.ontouchstart === 'undefined') return;
+    var sections = document.querySelectorAll('section[id]');
+    if (!sections.length) return;
+
+    var touchStartY = 0, touchStartTime = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        if (window.innerWidth > 1024) return;
+        touchStartY = e.touches[0].clientY;
+        touchStartTime = Date.now();
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        if (window.innerWidth > 1024) return;
+        var touchEndY = e.changedTouches[0].clientY;
+        var diffY = touchStartY - touchEndY; // positive = swipe up
+        var elapsed = Date.now() - touchStartTime;
+        var velocity = Math.abs(diffY) / Math.max(elapsed, 1);
+
+        // Only boost on fast swipes (velocity > 0.5 px/ms) with enough distance
+        if (velocity < 0.5 || Math.abs(diffY) < 60) return;
+
+        var scrollY = window.scrollY;
+        var target = null;
+
+        if (diffY > 0) {
+            // Swipe up → find next section below current position
+            for (var i = 0; i < sections.length; i++) {
+                if (sections[i].offsetTop > scrollY + 10) {
+                    target = sections[i];
+                    break;
+                }
+            }
+        } else {
+            // Swipe down → find previous section above current position
+            for (var i = sections.length - 1; i >= 0; i--) {
+                if (sections[i].offsetTop < scrollY - 10) {
+                    target = sections[i];
+                    break;
+                }
+            }
+        }
+
+        if (target) {
+            // Temporarily disable snap for smooth programmatic scroll
+            document.documentElement.style.scrollSnapType = 'none';
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(function() {
+                document.documentElement.style.scrollSnapType = '';
+            }, 600);
+        }
+    }, { passive: true });
+})();
+
 // Active nav highlighting with Intersection Observer
 (function() {
     var sections = document.querySelectorAll('section[id]');
