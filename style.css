@@ -2105,6 +2105,36 @@ body {
 
     .form-row {
         grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .form-group label {
+        margin-bottom: 3px;
+        font-size: 0.8rem;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 9px 12px;
+        font-size: 0.85rem;
+    }
+
+    .form-group textarea {
+        min-height: 80px;
+    }
+
+    .contact .section-header {
+        margin-bottom: 20px;
+    }
+
+    .contact .section-description {
+        font-size: 0.85rem;
+        margin-bottom: 0;
     }
 
     .btn {
