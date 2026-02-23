@@ -4,6 +4,9 @@ document.body.style.opacity = '1';
 // Always scroll to top on page load/refresh
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
+window.addEventListener('beforeunload', function() { window.scrollTo(0, 0); });
+document.addEventListener('DOMContentLoaded', function() { window.scrollTo(0, 0); });
+window.addEventListener('load', function() { window.scrollTo(0, 0); });
 
 // Pre-select contact subject from URL parameter (e.g. ?subject=Shop-Anfrage)
 (function() {
@@ -266,17 +269,45 @@ if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 // Mobile Navigation Toggle
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
+const navFloating = document.getElementById('nav-toggle-floating');
+
+function openMobileMenu() {
+    navToggle.classList.add('active');
+    navLinks.classList.add('active');
+    navbar.classList.add('nav-menu-open');
+    if (navFloating) navFloating.classList.add('active');
+}
+
+function closeMobileMenu() {
+    navToggle.classList.remove('active');
+    navLinks.classList.remove('active');
+    navbar.classList.remove('nav-menu-open');
+    if (navFloating) navFloating.classList.remove('active');
+}
 
 navToggle.addEventListener('click', () => {
-    navToggle.classList.toggle('active');
-    navLinks.classList.toggle('active');
+    if (navToggle.classList.contains('active')) {
+        closeMobileMenu();
+    } else {
+        openMobileMenu();
+    }
 });
+
+// Floating burger button toggles mobile menu
+if (navFloating) {
+    navFloating.addEventListener('click', () => {
+        if (navFloating.classList.contains('active')) {
+            closeMobileMenu();
+        } else {
+            openMobileMenu();
+        }
+    });
+}
 
 // Close mobile nav on link click
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-        navToggle.classList.remove('active');
-        navLinks.classList.remove('active');
+        closeMobileMenu();
     });
 });
 
@@ -315,25 +346,32 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     });
 });
 
-// Carousel (infinite forward loop)
+// Carousel (infinite loop with free-scroll on mobile)
 (function() {
     var track = document.querySelector('.carousel-track');
+    var wrapper = document.querySelector('.carousel-track-wrapper');
     var slides = document.querySelectorAll('.carousel-slide');
     var dotsContainer = document.querySelector('.carousel-dots');
     var nextBtn = document.querySelector('.carousel-next');
+    var prevBtn = document.querySelector('.carousel-prev');
     if (!track || !slides.length) return;
 
     var total = slides.length;
-    var pos = 0;          // internal position (can exceed total)
+    var pos = 0;
     var isMoving = false;
+    var isMobile = function() { return window.innerWidth <= 1024; };
 
-    // Klone anhängen für nahtlose Schleife
-    for (var c = 0; c < total; c++) {
-        var clone = slides[c].cloneNode(true);
-        clone.classList.add('clone');
-        track.appendChild(clone);
+    // Clone slides for infinite loop (3 sets for mobile free-scroll)
+    var cloneSets = 3;
+    for (var s = 0; s < cloneSets; s++) {
+        for (var c = 0; c < total; c++) {
+            var clone = slides[c].cloneNode(true);
+            clone.classList.add('clone');
+            track.appendChild(clone);
+        }
     }
 
+    // === Desktop: JS-based carousel ===
     function getSlideOffset(index) {
         var allSlides = track.querySelectorAll('.carousel-slide');
         if (index <= 0 || !allSlides.length) return 0;
@@ -342,11 +380,10 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     }
 
     function setPos(index, animate) {
+        if (isMobile()) return; // mobile uses native scroll
         track.style.transition = animate ? 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)' : 'none';
         track.style.transform = 'translateX(-' + getSlideOffset(index) + 'px)';
     }
-
-    setPos(0, false);
 
     // Dots
     for (var i = 0; i < total; i++) {
@@ -357,7 +394,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         dot.addEventListener('click', function() {
             if (isMoving) return;
             var target = parseInt(this.dataset.index);
-            // Immer vorwärts zum Ziel
             var stepsForward = (target - (pos % total) + total) % total;
             if (stepsForward === 0) return;
             isMoving = true;
@@ -384,8 +420,15 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         updateDots();
     }
 
+    function prev() {
+        if (isMoving || pos <= 0) return;
+        isMoving = true;
+        pos--;
+        setPos(pos, true);
+        updateDots();
+    }
+
     track.addEventListener('transitionend', function() {
-        // Unsichtbar zurücksetzen wenn wir in den Klon-Bereich gefahren sind
         if (pos >= total) {
             pos = pos % total;
             setPos(pos, false);
@@ -393,46 +436,64 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         isMoving = false;
     });
 
-    nextBtn.addEventListener('click', next);
+    if (nextBtn) nextBtn.addEventListener('click', next);
+    if (prevBtn) prevBtn.addEventListener('click', prev);
 
-    // Touch/swipe with velocity detection
-    var touchStartX = 0, touchStartTime = 0, touchDiffX = 0;
-    track.addEventListener('touchstart', function(e) {
-        touchStartX = e.touches[0].clientX;
-        touchStartTime = Date.now();
-        touchDiffX = 0;
-    }, { passive: true });
-    track.addEventListener('touchmove', function(e) {
-        touchDiffX = e.touches[0].clientX - touchStartX;
-    }, { passive: true });
-    track.addEventListener('touchend', function() {
-        if (isMoving) return;
-        var elapsed = Date.now() - touchStartTime;
-        var velocity = Math.abs(touchDiffX) / Math.max(elapsed, 1); // px/ms
-        var threshold = 30;
-
-        if (Math.abs(touchDiffX) < threshold) { touchDiffX = 0; return; }
-
-        // Fast swipe: skip multiple slides based on velocity
-        var steps = 1;
-        if (velocity > 1.5) steps = 4;
-        else if (velocity > 0.8) steps = 3;
-        else if (velocity > 0.4) steps = 2;
-
-        isMoving = true;
-        if (touchDiffX < 0) {
-            // Swipe left = forward
-            pos = Math.min(pos + steps, total + pos - (pos % total));
-        } else {
-            // Swipe right = backward
-            pos = Math.max(pos - steps, 0);
+    // === Mobile: Free native scroll with infinite loop reset ===
+    function setupMobileScroll() {
+        if (!isMobile()) {
+            wrapper.style.overflowX = '';
+            track.style.transform = '';
+            setPos(pos, false);
+            return;
         }
-        setPos(pos, true);
-        updateDots();
-        touchDiffX = 0;
+        // Enable native horizontal scroll on mobile
+        wrapper.style.overflowX = 'auto';
+        wrapper.style.webkitOverflowScrolling = 'touch';
+        track.style.transition = 'none';
+        track.style.transform = 'none';
+
+        // Position at first clone set so user can scroll both directions
+        var oneSetWidth = 0;
+        var allSlides = track.querySelectorAll('.carousel-slide');
+        for (var i = 0; i < total; i++) {
+            oneSetWidth += allSlides[i].offsetWidth + 20; // 20 = gap
+        }
+        // Start at position of first original set
+        if (wrapper.scrollLeft < 10) {
+            wrapper.scrollLeft = 0;
+        }
+    }
+
+    // Infinite loop reset on mobile scroll
+    var scrollTimeout;
+    wrapper.addEventListener('scroll', function() {
+        if (!isMobile()) return;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(function() {
+            var allSlides = track.querySelectorAll('.carousel-slide');
+            var oneSetWidth = 0;
+            for (var i = 0; i < total; i++) {
+                oneSetWidth += allSlides[i].offsetWidth + 20;
+            }
+            var totalWidth = track.scrollWidth;
+            var scrollPos = wrapper.scrollLeft;
+            var viewWidth = wrapper.clientWidth;
+
+            // Reset to equivalent position when near ends
+            if (scrollPos + viewWidth >= totalWidth - 50) {
+                wrapper.scrollLeft = scrollPos - oneSetWidth;
+            } else if (scrollPos <= 10 && scrollPos < oneSetWidth) {
+                // Allow free scrolling, reset only at extreme end
+            }
+        }, 100);
     });
 
-    window.addEventListener('resize', function() { setPos(pos, false); });
+    setupMobileScroll();
+    window.addEventListener('resize', function() {
+        setupMobileScroll();
+        if (!isMobile()) setPos(pos, false);
+    });
 })();
 
 // Page-exit fade for links to other pages (blog, shop, impressum, logo, lang-switcher)
@@ -457,9 +518,10 @@ document.querySelectorAll('.nav-links a, .nav-logo, .footer-bottom a, .lang-swit
     });
 });
 
-// Navbar scroll effect + scroll-to-top button
+// Navbar scroll effect + scroll-to-top button + mobile navbar hide
 const navbar = document.getElementById('navbar');
 var scrollTopBtn = document.getElementById('scroll-top');
+var isMobileNav = function() { return window.innerWidth <= 1024; };
 
 window.addEventListener('scroll', () => {
     if (window.scrollY > 50) {
@@ -467,10 +529,25 @@ window.addEventListener('scroll', () => {
     } else {
         navbar.classList.remove('scrolled');
     }
-    // Show/hide scroll-to-top button after 50% of page
+    // Show/hide scroll-to-top button after 35% of page
     if (scrollTopBtn) {
         var halfway = (document.documentElement.scrollHeight - window.innerHeight) * 0.35;
         scrollTopBtn.classList.toggle('visible', window.scrollY > halfway);
+    }
+    // Mobile: hide navbar after scrolling past hero, show floating burger
+    if (isMobileNav()) {
+        var hideThreshold = window.innerHeight * 0.3;
+        if (window.scrollY > hideThreshold) {
+            navbar.classList.add('nav-hidden');
+            if (navFloating) navFloating.classList.add('visible');
+        } else {
+            navbar.classList.remove('nav-hidden');
+            if (navFloating) navFloating.classList.remove('visible');
+            closeMobileMenu();
+        }
+    } else {
+        navbar.classList.remove('nav-hidden');
+        if (navFloating) navFloating.classList.remove('visible');
     }
 });
 
@@ -847,6 +924,13 @@ if (contactForm) {
             if (response.ok) {
                 contactForm.style.display = 'none';
                 document.getElementById('form-success').classList.add('visible');
+                // Scroll to top of contact section so success message is visible
+                var contactSection = document.getElementById('contact');
+                if (contactSection) {
+                    var offset = 88 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)')) || 0);
+                    var targetY = contactSection.getBoundingClientRect().top + window.scrollY - offset;
+                    window.scrollTo({ top: targetY, behavior: 'smooth' });
+                }
             } else {
                 submitBtn.textContent = isEN ? 'Error – try again' : 'Fehler – nochmal versuchen';
                 submitBtn.disabled = false;
