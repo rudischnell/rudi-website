@@ -304,10 +304,10 @@ if (navFloating) {
     });
 }
 
-// Close mobile nav on link click
+// Close mobile nav on link click (delay so anchor navigation fires first)
 navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
-        closeMobileMenu();
+        setTimeout(closeMobileMenu, 50);
     });
 });
 
@@ -329,7 +329,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         if (!target) return;
         e.preventDefault();
 
-        var headerOffset = 88;
+        var headerOffset = (window.innerWidth <= 1024) ? 0 : 88;
         var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
         window.scrollTo(0, targetY);
         history.pushState(null, null, hash);
