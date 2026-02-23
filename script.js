@@ -479,10 +479,10 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
                 return;
             }
             if (isMoving) return;
-            var stepsForward = (target - (pos % total) + total) % total;
-            if (stepsForward === 0) return;
+            if (target === pos % total) return;
             isMoving = true;
-            pos += stepsForward;
+            // Jump directly to target – shortest path, no accumulation
+            pos = target;
             setPos(pos, true);
             updateDots();
         });
