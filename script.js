@@ -432,8 +432,21 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         dot.setAttribute('aria-label', 'Slide ' + (i + 1));
         dot.dataset.index = i;
         dot.addEventListener('click', function() {
-            if (isMoving) return;
             var target = parseInt(this.dataset.index);
+            if (isMobile()) {
+                // Mobile: scroll wrapper to the target slide
+                var allSlides = track.querySelectorAll('.carousel-slide');
+                if (allSlides[target]) {
+                    wrapper.scrollTo({
+                        left: allSlides[target].offsetLeft - allSlides[0].offsetLeft,
+                        behavior: 'smooth'
+                    });
+                }
+                pos = target;
+                updateDots();
+                return;
+            }
+            if (isMoving) return;
             var stepsForward = (target - (pos % total) + total) % total;
             if (stepsForward === 0) return;
             isMoving = true;
