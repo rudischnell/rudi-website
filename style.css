@@ -2112,10 +2112,10 @@ body {
     }
 }
 
-/* ===== Mobile: Scroll-Snap (Reels-style) ===== */
+/* ===== Mobile: Scroll-Snap (soft proximity) ===== */
 @media (max-width: 1024px) {
     html {
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
@@ -2126,14 +2126,17 @@ body {
     .contact,
     .about {
         scroll-snap-align: start;
-        scroll-snap-stop: always;
-        min-height: 100vh;
-        min-height: 100dvh;
-        padding-top: calc(24px + env(safe-area-inset-top, 0px));
     }
 
     .hero {
-        padding-top: 0;
+        min-height: 100vh;
+        min-height: 100dvh;
+    }
+
+    /* Service cards snap individually when opened */
+    .service-card.active {
+        scroll-snap-align: start;
+        scroll-margin-top: 12px;
     }
 
     .footer {

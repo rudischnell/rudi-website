@@ -235,6 +235,14 @@ window.addEventListener('pagehide', forceScrollTop);
             cards.forEach(function(c) { if (c !== card) c.classList.remove('active'); });
             card.classList.toggle('active', !wasActive);
 
+            // Mobile: scroll opened card to top of screen
+            if (isSingleOrTwoCol() && !wasActive) {
+                setTimeout(function() {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 50);
+                return;
+            }
+
             // Grid-Locking nur auf Desktop
             if (isSingleOrTwoCol()) return;
 
@@ -369,9 +377,20 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         if (!target) return;
         e.preventDefault();
 
-        var headerOffset = (window.innerWidth <= 1024) ? 0 : 88;
+        var mobile = window.innerWidth <= 1024;
+        var headerOffset = mobile ? 0 : 88;
         var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-        window.scrollTo(0, targetY);
+
+        // On mobile, temporarily disable snap so scrollTo lands precisely
+        if (mobile) {
+            document.documentElement.style.scrollSnapType = 'none';
+            window.scrollTo(0, targetY);
+            setTimeout(function() {
+                document.documentElement.style.scrollSnapType = '';
+            }, 100);
+        } else {
+            window.scrollTo(0, targetY);
+        }
         history.pushState(null, null, hash);
 
         // Highlight target section briefly
@@ -518,28 +537,45 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         }
     }
 
-    // Infinite loop reset on mobile scroll
+    // Infinite loop reset + dot tracking on mobile scroll
     var scrollTimeout;
     wrapper.addEventListener('scroll', function() {
         if (!isMobile()) return;
+
+        // Update dots based on which slide is most visible
+        var allSlides = track.querySelectorAll('.carousel-slide');
+        var scrollPos = wrapper.scrollLeft;
+        var wrapperCenter = scrollPos + wrapper.clientWidth / 2;
+        var closestIndex = 0;
+        var closestDist = Infinity;
+        for (var si = 0; si < allSlides.length; si++) {
+            var slideCenter = allSlides[si].offsetLeft + allSlides[si].offsetWidth / 2;
+            var dist = Math.abs(slideCenter - wrapperCenter);
+            if (dist < closestDist) {
+                closestDist = dist;
+                closestIndex = si;
+            }
+        }
+        var dotIndex = closestIndex % total;
+        dots.forEach(function(d, di) {
+            d.classList.toggle('active', di === dotIndex);
+        });
+
+        // Infinite loop reset after scroll stops
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(function() {
-            var allSlides = track.querySelectorAll('.carousel-slide');
             var oneSetWidth = 0;
             for (var i = 0; i < total; i++) {
                 oneSetWidth += allSlides[i].offsetWidth + 20;
             }
             var totalWidth = track.scrollWidth;
-            var scrollPos = wrapper.scrollLeft;
             var viewWidth = wrapper.clientWidth;
 
             // Reset to equivalent position when near ends
             if (scrollPos + viewWidth >= totalWidth - 50) {
                 wrapper.scrollLeft = scrollPos - oneSetWidth;
-            } else if (scrollPos <= 10 && scrollPos < oneSetWidth) {
-                // Allow free scrolling, reset only at extreme end
             }
-        }, 100);
+        }, 150);
     });
 
     setupMobileScroll();
