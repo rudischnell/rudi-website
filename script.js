@@ -1,40 +1,41 @@
 // Page load – ensure body is always visible (safety net)
 document.body.style.opacity = '1';
 
+// Central snap controller – prevents conflicting timeouts
+var snapTimer = null;
+function disableSnap() {
+    if (snapTimer) { clearTimeout(snapTimer); snapTimer = null; }
+    document.documentElement.style.scrollSnapType = 'none';
+}
+function enableSnap(delay) {
+    if (snapTimer) clearTimeout(snapTimer);
+    snapTimer = setTimeout(function() {
+        document.documentElement.style.scrollSnapType = '';
+        snapTimer = null;
+    }, delay || 0);
+}
+
 // Always scroll to top on page load/refresh (Safari-hardened)
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
-// Temporarily disable scroll-snap so Safari doesn't snap to a random section
-// while restoring scroll position during page load
-document.documentElement.style.scrollSnapType = 'none';
+disableSnap();
 window.scrollTo(0, 0);
 
 function forceScrollTop() {
     window.scrollTo(0, 0);
 }
 
-// Safari ignores scrollRestoration and restores scroll AFTER load,
-// so we force-reset with multiple strategies:
 document.addEventListener('DOMContentLoaded', forceScrollTop);
 window.addEventListener('load', function() {
     forceScrollTop();
-    // Re-enable scroll-snap after Safari has finished its scroll restoration
-    setTimeout(function() {
-        document.documentElement.style.scrollSnapType = '';
-        forceScrollTop();
-    }, 200);
+    enableSnap(200);
 });
 
-// Safari bfcache: pageshow fires when restoring from back-forward cache
 window.addEventListener('pageshow', function(e) {
     if (e.persisted) {
-        // Page was restored from bfcache – disable snap, reset, re-enable
-        document.documentElement.style.scrollSnapType = 'none';
+        disableSnap();
         forceScrollTop();
-        setTimeout(function() {
-            document.documentElement.style.scrollSnapType = '';
-            forceScrollTop();
-        }, 200);
+        enableSnap(200);
     }
     forceScrollTop();
     setTimeout(forceScrollTop, 0);
@@ -42,10 +43,7 @@ window.addEventListener('pageshow', function(e) {
     setTimeout(forceScrollTop, 120);
 });
 
-// beforeunload: set scroll to 0 so Safari's restoration target is top
 window.addEventListener('beforeunload', forceScrollTop);
-
-// pagehide: Safari counterpart – reset before page enters bfcache
 window.addEventListener('pagehide', forceScrollTop);
 
 // Pre-select contact subject from URL parameter (e.g. ?subject=Shop-Anfrage)
@@ -243,25 +241,18 @@ window.addEventListener('pagehide', forceScrollTop);
             // Mobile: scroll to card on open, back to section on close
             if (isSingleOrTwoCol()) {
                 var anyActive = grid.querySelector('.service-card.active') !== null;
-                // Disable snap while any card is open
-                document.documentElement.style.scrollSnapType = 'none';
+                disableSnap();
 
                 if (!wasActive) {
-                    // Opening a card – wait for close animation of previous card
-                    // to settle layout, then scroll to the newly opened card
                     setTimeout(function() {
                         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 350);
                 } else if (!anyActive) {
-                    // Closed last card – scroll back to services section
                     var servicesSection = grid.closest('section');
                     if (servicesSection) {
                         servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
-                    // Re-enable snap after scroll completes
-                    setTimeout(function() {
-                        document.documentElement.style.scrollSnapType = '';
-                    }, 800);
+                    enableSnap(800);
                 }
                 return;
             }
@@ -406,11 +397,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
 
         // On mobile, temporarily disable snap so scrollTo lands precisely
         if (mobile) {
-            document.documentElement.style.scrollSnapType = 'none';
+            disableSnap();
             window.scrollTo(0, targetY);
-            setTimeout(function() {
-                document.documentElement.style.scrollSnapType = '';
-            }, 100);
+            enableSnap(100);
         } else {
             window.scrollTo(0, targetY);
         }
@@ -766,12 +755,10 @@ if (scrollTopBtn) {
     function goToSection(idx) {
         if (idx < 0 || idx >= sections.length) return;
         isAnimating = true;
-        document.documentElement.style.scrollSnapType = 'none';
+        disableSnap();
         window.scrollTo({ top: sections[idx].offsetTop, behavior: 'smooth' });
-        setTimeout(function() {
-            document.documentElement.style.scrollSnapType = '';
-            isAnimating = false;
-        }, 700);
+        enableSnap(700);
+        setTimeout(function() { isAnimating = false; }, 700);
     }
 
     document.addEventListener('touchstart', function(e) {
