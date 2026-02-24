@@ -240,9 +240,29 @@ window.addEventListener('pagehide', forceScrollTop);
             cards.forEach(function(c) { if (c !== card) c.classList.remove('active'); });
             card.classList.toggle('active', !wasActive);
 
-            // Mobile: scroll opened card to top of screen (simultaneously with open)
-            if (isSingleOrTwoCol() && !wasActive) {
-                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Mobile: scroll opened card to top, or snap back to services on close
+            if (isSingleOrTwoCol()) {
+                if (!wasActive) {
+                    // Opening a card – disable section snap, scroll to card
+                    document.documentElement.style.scrollSnapType = 'none';
+                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    setTimeout(function() {
+                        document.documentElement.style.scrollSnapType = '';
+                    }, 600);
+                } else {
+                    // Closing last card – snap back to services section top
+                    var anyActive = grid.querySelector('.service-card.active') !== null;
+                    if (!anyActive) {
+                        document.documentElement.style.scrollSnapType = 'none';
+                        var servicesSection = grid.closest('section');
+                        if (servicesSection) {
+                            servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                        setTimeout(function() {
+                            document.documentElement.style.scrollSnapType = '';
+                        }, 600);
+                    }
+                }
                 return;
             }
 
@@ -754,11 +774,10 @@ if (scrollTopBtn) {
         var target = null;
 
         if (diffY > 0) {
-            // Swipe up → find next section, but only if it's already
-            // partially visible (entering the viewport from below)
+            // Swipe up → find next section whose top is below current scroll
             for (var i = 0; i < sections.length; i++) {
                 var secTop = sections[i].offsetTop;
-                if (secTop > scrollY + 10 && secTop < scrollY + viewH) {
+                if (secTop > scrollY + 10) {
                     target = sections[i];
                     break;
                 }
