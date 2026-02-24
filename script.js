@@ -19,32 +19,60 @@ function enableSnap(delay) {
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
 disableSnap();
-window.scrollTo(0, 0);
 
 function forceScrollTop() {
     window.scrollTo(0, 0);
 }
 
-document.addEventListener('DOMContentLoaded', forceScrollTop);
+function hasUrlHash() {
+    var h = window.location.hash;
+    // Before DOM ready, just check if hash exists (don't querySelector)
+    if (!h || h.length <= 1) return false;
+    try { return !!document.querySelector(h); } catch(e) { return false; }
+}
+
+// Early scroll-to-top only if no hash
+if (!window.location.hash || window.location.hash.length <= 1) {
+    window.scrollTo(0, 0);
+}
+
+function scrollToHash() {
+    var target = document.querySelector(window.location.hash);
+    if (!target) return;
+    var mobile = window.innerWidth <= 768;
+    var headerOffset = mobile ? 0 : 88;
+    var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+    window.scrollTo(0, targetY);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    if (hasUrlHash()) {
+        scrollToHash();
+    } else {
+        forceScrollTop();
+    }
+});
 window.addEventListener('load', function() {
-    forceScrollTop();
+    if (hasUrlHash()) {
+        scrollToHash();
+    } else {
+        forceScrollTop();
+    }
     enableSnap(200);
 });
 
 window.addEventListener('pageshow', function(e) {
     if (e.persisted) {
         disableSnap();
-        forceScrollTop();
+        if (window.scrollY < 10) forceScrollTop();
         enableSnap(200);
     }
-    forceScrollTop();
-    setTimeout(forceScrollTop, 0);
-    setTimeout(forceScrollTop, 50);
-    setTimeout(forceScrollTop, 120);
+    if (window.scrollY < 10) {
+        forceScrollTop();
+        setTimeout(forceScrollTop, 0);
+        setTimeout(forceScrollTop, 50);
+    }
 });
-
-window.addEventListener('beforeunload', forceScrollTop);
-window.addEventListener('pagehide', forceScrollTop);
 
 // Pre-select contact subject from URL parameter (e.g. ?subject=Shop-Anfrage)
 (function() {
@@ -92,18 +120,29 @@ window.addEventListener('pagehide', forceScrollTop);
     const heroTagline = document.querySelector('.hero .hero-tagline');
     if (!heroH1) return;
 
-    const variations = [
+    var isEnglish = document.documentElement.lang === 'en';
+
+    const variations = isEnglish ? [
+        { title: 'CREATIVE FOR YOU!', accent: 'YOU!', tagline: 'CONCEPT \u00b7 GRAPHICS \u00b7 PRINT' },
+        { title: 'RUDI SCHNELL.STUDIO', accent: '.STUDIO', tagline: 'HONEST \u00b7 DIRECT \u00b7 SIMPLE', spacing: { pos: 4, width: '0.1em' } },
+        { title: 'Design & Workshops', accent: '&', tagline: 'SCREEN \u00b7 PAPER \u00b7 EDUCATION' }
+    ] : [
         { title: 'KREATIV F\u00dcR DICH!', accent: 'DICH!', tagline: 'KONZEPT \u00b7 GRAFIK \u00b7 DRUCK' },
         { title: 'RUDI SCHNELL.STUDIO', accent: '.STUDIO', tagline: 'EHRLICH \u00b7 DIREKT \u00b7 EINFACH', spacing: { pos: 4, width: '0.1em' } },
         { title: 'Design & Workshops', accent: '&', tagline: 'BILDSCHIRM \u00b7 PAPIER \u00b7 BILDUNG' }
     ];
 
-    // Prevent same title twice in a row
-    var lastIndex = parseInt(localStorage.getItem('heroLastIndex'), 10);
+    // First visit: always show first variation; subsequent visits: random, no consecutive repeats
+    var storedIndex = localStorage.getItem('heroLastIndex');
+    var lastIndex = parseInt(storedIndex, 10);
     var idx;
-    do {
-        idx = Math.floor(Math.random() * variations.length);
-    } while (idx === lastIndex && variations.length > 1);
+    if (storedIndex === null) {
+        idx = 0;
+    } else {
+        do {
+            idx = Math.floor(Math.random() * variations.length);
+        } while (idx === lastIndex && variations.length > 1);
+    }
     localStorage.setItem('heroLastIndex', idx);
 
     var pick = variations[idx];

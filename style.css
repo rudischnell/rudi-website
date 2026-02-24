@@ -48,7 +48,12 @@
 html {
     scroll-padding-top: 88px;
     scroll-padding-top: calc(88px + env(safe-area-inset-top, 0px));
-    overscroll-behavior-y: none;
+}
+
+@media (min-width: 769px) {
+    html {
+        overscroll-behavior-y: none;
+    }
 }
 
 /* Anchor navigation: subtle highlight pulse on target section */
@@ -135,6 +140,7 @@ body {
     display: flex;
     align-items: center;
     text-decoration: none;
+    z-index: 102;
 }
 
 .nav-logo img {
@@ -2357,7 +2363,17 @@ body {
     .contact,
     .about {
         scroll-snap-align: start;
+    }
+
+    .hero {
         scroll-snap-stop: always;
+    }
+
+    .services,
+    .portfolio,
+    .contact,
+    .about {
+        scroll-snap-stop: normal;
     }
 
     .hero {
@@ -2385,6 +2401,10 @@ body {
         pointer-events: all;
     }
 
+    .nav-toggle {
+        display: none !important;
+    }
+
     .nav-toggle-floating {
         display: flex;
         flex-direction: column;
@@ -2405,18 +2425,14 @@ body {
         cursor: pointer;
         -webkit-tap-highlight-color: transparent;
         outline: none;
-        opacity: 0;
-        pointer-events: none;
+        opacity: 1;
+        pointer-events: all;
         transition: opacity 0.35s ease, background 0.2s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        perspective: 120px;
     }
 
     [data-theme="light"] .nav-toggle-floating {
         background: rgba(205, 206, 209, 0.6);
-    }
-
-    .nav-toggle-floating.visible {
-        opacity: 1;
-        pointer-events: all;
     }
 
     .nav-toggle-floating span {
@@ -2427,8 +2443,10 @@ body {
         border-radius: 2px;
         display: block;
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        backface-visibility: hidden;
     }
 
+    /* Front face: + (visible at 0°) */
     .nav-toggle-floating span:nth-child(1) {
         transform: rotate(90deg);
     }
@@ -2437,8 +2455,35 @@ body {
         transform: rotate(0deg);
     }
 
+    /* Back face: X (visible at 180°) */
     .nav-toggle-floating.active {
+        animation: coinflip 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .nav-toggle-floating.active span:nth-child(1) {
         transform: rotateY(180deg) rotate(45deg);
+    }
+
+    .nav-toggle-floating.active span:nth-child(2) {
+        transform: rotateY(180deg) rotate(-45deg);
+    }
+
+    @keyframes coinflip {
+        0% {
+            transform: rotateY(0deg) translateY(0);
+        }
+        40% {
+            transform: rotateY(90deg) translateY(-3px);
+        }
+        70% {
+            transform: rotateY(180deg) translateY(-1px);
+        }
+        85% {
+            transform: rotateY(180deg) translateY(1px);
+        }
+        100% {
+            transform: rotateY(180deg) translateY(0);
+        }
     }
 }
 
