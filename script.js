@@ -276,6 +276,21 @@ window.addEventListener('pagehide', forceScrollTop);
         });
     });
 
+    // Auto-close cards when user leaves the services section (restores snap)
+    var servicesSection = grid.closest('section');
+    if (servicesSection) {
+        var leaveObserver = new IntersectionObserver(function(entries) {
+            if (!entries[0].isIntersecting && window.innerWidth <= 768) {
+                var anyActive = grid.querySelector('.service-card.active');
+                if (anyActive) {
+                    cards.forEach(function(c) { c.classList.remove('active'); });
+                    enableSnap(0);
+                }
+            }
+        }, { threshold: 0 });
+        leaveObserver.observe(servicesSection);
+    }
+
     // CTA buttons: scroll to contact and pre-select subject
     document.querySelectorAll('.btn-service').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -291,9 +306,11 @@ window.addEventListener('pagehide', forceScrollTop);
                     }
                 }
             }
+            // Close any open cards before navigating away
+            cards.forEach(function(c) { c.classList.remove('active'); });
+
             var target = document.getElementById('contact');
             if (target) {
-                // Re-enable snap before scrolling to contact (a snap point)
                 enableSnap(0);
                 var mobile = window.innerWidth <= 768;
                 if (mobile) {
