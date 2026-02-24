@@ -241,18 +241,20 @@ window.addEventListener('pagehide', forceScrollTop);
             // Mobile: scroll to card on open, back to section on close
             if (isSingleOrTwoCol()) {
                 var anyActive = grid.querySelector('.service-card.active') !== null;
-                disableSnap();
 
                 if (!wasActive) {
+                    // Opening a card: disable snap so user can scroll within expanded card
+                    disableSnap();
                     setTimeout(function() {
                         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 350);
                 } else if (!anyActive) {
+                    // All cards closed: scroll back to section and re-enable snap
                     var servicesSection = grid.closest('section');
                     if (servicesSection) {
                         servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
-                    enableSnap(800);
+                    enableSnap(600);
                 }
                 return;
             }
@@ -291,9 +293,16 @@ window.addEventListener('pagehide', forceScrollTop);
             }
             var target = document.getElementById('contact');
             if (target) {
-                var headerOffset = 88;
-                var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-                window.scrollTo({ top: targetY, behavior: 'smooth' });
+                // Re-enable snap before scrolling to contact (a snap point)
+                enableSnap(0);
+                var mobile = window.innerWidth <= 768;
+                if (mobile) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    var headerOffset = 88;
+                    var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+                    window.scrollTo({ top: targetY, behavior: 'smooth' });
+                }
                 target.classList.remove('section-arrive');
                 void target.offsetWidth;
                 target.classList.add('section-arrive');
@@ -395,11 +404,9 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         var headerOffset = mobile ? 0 : 88;
         var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
 
-        // On mobile, temporarily disable snap so scrollTo lands precisely
         if (mobile) {
-            disableSnap();
-            window.scrollTo(0, targetY);
-            enableSnap(100);
+            // Scroll directly to the section – CSS mandatory snap ensures precise landing
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
             window.scrollTo(0, targetY);
         }
@@ -734,51 +741,8 @@ if (scrollTopBtn) {
     });
 }
 
-// Mobile: TikTok-style section navigation – one swipe = one section
-(function() {
-    if (typeof window.ontouchstart === 'undefined') return;
-    var sections = document.querySelectorAll('section[id]');
-    if (!sections.length) return;
-
-    var touchStartY = 0, isAnimating = false;
-    var minSwipe = 30; // minimum px to count as intentional swipe
-
-    function getCurrentIdx() {
-        var scrollY = window.scrollY;
-        var idx = 0;
-        for (var i = 0; i < sections.length; i++) {
-            if (sections[i].offsetTop <= scrollY + 10) idx = i;
-        }
-        return idx;
-    }
-
-    function goToSection(idx) {
-        if (idx < 0 || idx >= sections.length) return;
-        isAnimating = true;
-        disableSnap();
-        window.scrollTo({ top: sections[idx].offsetTop, behavior: 'smooth' });
-        enableSnap(700);
-        setTimeout(function() { isAnimating = false; }, 700);
-    }
-
-    document.addEventListener('touchstart', function(e) {
-        if (window.innerWidth > 768) return;
-        touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    document.addEventListener('touchend', function(e) {
-        if (window.innerWidth > 768 || isAnimating) return;
-        var diffY = touchStartY - e.changedTouches[0].clientY;
-        if (Math.abs(diffY) < minSwipe) return;
-
-        var currentIdx = getCurrentIdx();
-        if (diffY > 0) {
-            goToSection(currentIdx + 1);
-        } else {
-            goToSection(currentIdx - 1);
-        }
-    }, { passive: true });
-})();
+// Mobile swipe navigation is handled entirely by CSS scroll-snap-type: y mandatory.
+// No JS swipe handler needed – the browser natively snaps one section at a time.
 
 // Active nav highlighting with Intersection Observer
 (function() {
