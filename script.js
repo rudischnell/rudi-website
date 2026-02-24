@@ -783,11 +783,10 @@ if (scrollTopBtn) {
                 }
             }
         } else {
-            // Swipe down → find previous section, but only if current
-            // section top is visible (we're near the top of it)
+            // Swipe down → find previous section whose top is above current scroll
             for (var i = sections.length - 1; i >= 0; i--) {
-                var secBottom = sections[i].offsetTop + sections[i].offsetHeight;
-                if (secBottom < scrollY + viewH && sections[i].offsetTop < scrollY - 10) {
+                var secTop = sections[i].offsetTop;
+                if (secTop < scrollY - 10) {
                     target = sections[i];
                     break;
                 }
