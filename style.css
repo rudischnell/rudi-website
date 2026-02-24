@@ -2352,7 +2352,7 @@ body {
 /* ===== Mobile: Scroll-Snap ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y proximity;
+        scroll-snap-type: y mandatory;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
@@ -2362,16 +2362,7 @@ body {
     .portfolio,
     .contact {
         scroll-snap-align: start;
-    }
-
-    .hero {
         scroll-snap-stop: always;
-    }
-
-    .services,
-    .portfolio,
-    .contact {
-        scroll-snap-stop: normal;
     }
 
     .hero {
@@ -2442,10 +2433,9 @@ body {
         border-radius: 2px;
         display: block;
         transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        backface-visibility: hidden;
     }
 
-    /* Front face: + (visible at 0°) */
+    /* Closed: + shape */
     .nav-toggle-floating span:nth-child(1) {
         transform: rotate(90deg);
     }
@@ -2454,17 +2444,17 @@ body {
         transform: rotate(0deg);
     }
 
-    /* Back face: X (visible at 180°) */
+    /* Open: X shape + coinflip on container */
     .nav-toggle-floating.active {
         animation: coinflip 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
 
     .nav-toggle-floating.active span:nth-child(1) {
-        transform: rotateY(180deg) rotate(45deg);
+        transform: rotate(45deg);
     }
 
     .nav-toggle-floating.active span:nth-child(2) {
-        transform: rotateY(180deg) rotate(-45deg);
+        transform: rotate(-45deg);
     }
 
     @keyframes coinflip {
