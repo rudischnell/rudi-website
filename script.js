@@ -40,9 +40,13 @@ function scrollToHash() {
     var target = document.querySelector(window.location.hash);
     if (!target) return;
     var mobile = window.innerWidth <= 768;
-    var headerOffset = mobile ? 0 : 88;
-    var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-    window.scrollTo(0, targetY);
+    if (mobile) {
+        target.scrollIntoView({ block: 'start' });
+    } else {
+        var headerOffset = 88;
+        var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+        window.scrollTo(0, targetY);
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -55,10 +59,14 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('load', function() {
     if (hasUrlHash()) {
         scrollToHash();
+        // Re-scroll after fonts/layout settle to ensure correct position
+        setTimeout(scrollToHash, 100);
+        setTimeout(scrollToHash, 300);
+        enableSnap(500);
     } else {
         forceScrollTop();
+        enableSnap(200);
     }
-    enableSnap(200);
 });
 
 window.addEventListener('pageshow', function(e) {

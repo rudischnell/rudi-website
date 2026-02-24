@@ -2352,7 +2352,7 @@ body {
 /* ===== Mobile: Scroll-Snap ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
@@ -2360,8 +2360,7 @@ body {
     .hero,
     .services,
     .portfolio,
-    .contact,
-    .about {
+    .contact {
         scroll-snap-align: start;
     }
 
@@ -2371,8 +2370,7 @@ body {
 
     .services,
     .portfolio,
-    .contact,
-    .about {
+    .contact {
         scroll-snap-stop: normal;
     }
 
@@ -2429,6 +2427,7 @@ body {
         pointer-events: all;
         transition: opacity 0.35s ease, background 0.2s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         perspective: 120px;
+        transform-style: preserve-3d;
     }
 
     [data-theme="light"] .nav-toggle-floating {
