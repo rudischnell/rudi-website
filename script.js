@@ -240,28 +240,25 @@ window.addEventListener('pagehide', forceScrollTop);
             cards.forEach(function(c) { if (c !== card) c.classList.remove('active'); });
             card.classList.toggle('active', !wasActive);
 
-            // Mobile: scroll opened card to top, or snap back to services on close
+            // Mobile: scroll to card on open, back to section on close
             if (isSingleOrTwoCol()) {
+                var anyActive = grid.querySelector('.service-card.active') !== null;
+                // Disable snap while any card is open
+                document.documentElement.style.scrollSnapType = 'none';
+
                 if (!wasActive) {
-                    // Opening a card – disable section snap, scroll to card
-                    document.documentElement.style.scrollSnapType = 'none';
+                    // Opening a card – scroll to it
                     card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else if (!anyActive) {
+                    // Closed last card – scroll back to services section
+                    var servicesSection = grid.closest('section');
+                    if (servicesSection) {
+                        servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    // Re-enable snap after scroll completes
                     setTimeout(function() {
                         document.documentElement.style.scrollSnapType = '';
-                    }, 600);
-                } else {
-                    // Closing last card – snap back to services section top
-                    var anyActive = grid.querySelector('.service-card.active') !== null;
-                    if (!anyActive) {
-                        document.documentElement.style.scrollSnapType = 'none';
-                        var servicesSection = grid.closest('section');
-                        if (servicesSection) {
-                            servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }
-                        setTimeout(function() {
-                            document.documentElement.style.scrollSnapType = '';
-                        }, 600);
-                    }
+                    }, 800);
                 }
                 return;
             }

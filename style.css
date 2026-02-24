@@ -2110,9 +2110,6 @@ body {
         min-height: 100vh;
         min-height: 100dvh;
         padding: 56px 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
     }
 
     /* About + Footer share one viewport height */
@@ -2273,7 +2270,7 @@ body {
 /* ===== Mobile: Scroll-Snap (soft proximity) ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
@@ -2295,11 +2292,7 @@ body {
         min-height: 100dvh;
     }
 
-    /* Service cards snap individually when opened */
-    .service-card.active {
-        scroll-snap-align: start;
-        scroll-margin-top: 12px;
-    }
+    /* Service cards: no own snap point – JS handles scroll positioning */
 
     /* Footer shares screen with About – no separate snap */
 }
