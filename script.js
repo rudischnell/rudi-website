@@ -92,11 +92,11 @@ window.addEventListener('pageshow', function(e) {
 
     const variations = isEnglish ? [
         { title: 'CREATIVE FOR YOU!', accent: 'YOU!', tagline: 'CONCEPT \u00b7 GRAPHICS \u00b7 PRINT' },
-        { title: 'RUDI SCHNELL.STUDIO', accent: '.STUDIO', tagline: 'HONEST \u00b7 DIRECT \u00b7 SIMPLE', spacing: { pos: 4, width: '0.1em' } },
+        { title: 'RUDISCHNELL.STUDIO', accent: '.STUDIO', tagline: 'HONEST \u00b7 DIRECT \u00b7 SIMPLE' },
         { title: 'Design & Workshops', accent: '&', tagline: 'SCREEN \u00b7 PAPER \u00b7 EDUCATION' }
     ] : [
         { title: 'KREATIV F\u00dcR DICH!', accent: 'DICH!', tagline: 'KONZEPT \u00b7 GRAFIK \u00b7 DRUCK' },
-        { title: 'RUDI SCHNELL.STUDIO', accent: '.STUDIO', tagline: 'EHRLICH \u00b7 DIREKT \u00b7 EINFACH', spacing: { pos: 4, width: '0.1em' } },
+        { title: 'RUDISCHNELL.STUDIO', accent: '.STUDIO', tagline: 'EHRLICH \u00b7 DIREKT \u00b7 EINFACH' },
         { title: 'Design & Workshops', accent: '&', tagline: 'BILDSCHIRM \u00b7 PAPIER \u00b7 BILDUNG' }
     ];
 
@@ -428,6 +428,8 @@ function toggleTheme() {
 themeToggle.addEventListener('click', toggleTheme);
 var themeToggleMobile = document.getElementById('theme-toggle-mobile');
 if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
+var themeTogglePeek = document.getElementById('theme-toggle-peek');
+if (themeTogglePeek) themeTogglePeek.addEventListener('click', toggleTheme);
 
 // Mobile Navigation Toggle
 const navToggle = document.getElementById('nav-toggle');

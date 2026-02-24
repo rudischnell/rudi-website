@@ -2166,6 +2166,7 @@ body {
 @media (max-width: 768px) {
     .hero {
         height: 100dvh;
+        min-height: 0;
         padding: 110px 20px 48px;
         overflow: hidden;
     }
@@ -2376,10 +2377,6 @@ body {
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }
-
-    .hero {
-        height: 100dvh;
-    }
 }
 
 /* ===== Mobile: Floating Burger Button ===== */
@@ -2464,6 +2461,21 @@ body {
 
     .nav-toggle-floating.active span:nth-child(2) {
         transform: rotate(-45deg);
+    }
+}
+
+/* ===== Mobile: Theme toggle peeking behind burger ===== */
+.theme-toggle-peek {
+    display: none !important;
+}
+
+@media (max-width: 768px) {
+    .theme-toggle-peek {
+        display: flex !important;
+        position: fixed;
+        top: calc(20px + env(safe-area-inset-top, 0px));
+        right: 42px;
+        z-index: 100;
     }
 }
 
