@@ -745,13 +745,13 @@ if (scrollTopBtn) {
     });
 }
 
-// Mobile: Swipe boost – accelerate toward next/prev section on fast swipe
+// Mobile: Swipe boost – snap to next/prev section on fast swipe
 (function() {
     if (typeof window.ontouchstart === 'undefined') return;
     var sections = document.querySelectorAll('section[id]');
     if (!sections.length) return;
 
-    var touchStartY = 0, touchStartTime = 0;
+    var touchStartY = 0, touchStartTime = 0, boosting = false;
 
     document.addEventListener('touchstart', function(e) {
         if (window.innerWidth > 768) return;
@@ -760,63 +760,31 @@ if (scrollTopBtn) {
     }, { passive: true });
 
     document.addEventListener('touchend', function(e) {
-        if (window.innerWidth > 768) return;
-        var touchEndY = e.changedTouches[0].clientY;
-        var diffY = touchStartY - touchEndY; // positive = swipe up
+        if (window.innerWidth > 768 || boosting) return;
+        var diffY = touchStartY - e.changedTouches[0].clientY;
         var elapsed = Date.now() - touchStartTime;
         var velocity = Math.abs(diffY) / Math.max(elapsed, 1);
 
-        // Only boost on fast swipes (velocity > 0.5 px/ms) with enough distance
         if (velocity < 0.5 || Math.abs(diffY) < 60) return;
 
+        // Find current section (last one whose top is at or above scroll)
         var scrollY = window.scrollY;
-        var viewH = window.innerHeight;
-        var target = null;
-
-        if (diffY > 0) {
-            // Swipe up → find next section whose top is below current scroll
-            for (var i = 0; i < sections.length; i++) {
-                var secTop = sections[i].offsetTop;
-                if (secTop > scrollY + 10) {
-                    target = sections[i];
-                    break;
-                }
-            }
-        } else {
-            // Swipe down → find previous section whose top is above current scroll
-            for (var i = sections.length - 1; i >= 0; i--) {
-                var secTop = sections[i].offsetTop;
-                if (secTop < scrollY - 10) {
-                    target = sections[i];
-                    break;
-                }
-            }
+        var currentIdx = 0;
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].offsetTop <= scrollY + 10) currentIdx = i;
         }
 
-        if (target) {
-            // Kill native momentum, scroll to exact section top
-            document.documentElement.style.scrollSnapType = 'none';
-            document.documentElement.style.overflow = 'hidden';
-            void document.documentElement.offsetHeight;
-            document.documentElement.style.overflow = '';
-            var targetY = target.offsetTop;
-            window.scrollTo({ top: targetY, behavior: 'smooth' });
-            // Re-enable snap only after scroll has fully settled
-            var checkInterval = setInterval(function() {
-                if (Math.abs(window.scrollY - targetY) < 2) {
-                    clearInterval(checkInterval);
-                    // Correct any sub-pixel drift
-                    window.scrollTo(0, targetY);
-                    document.documentElement.style.scrollSnapType = '';
-                }
-            }, 50);
-            // Safety fallback
-            setTimeout(function() {
-                clearInterval(checkInterval);
-                window.scrollTo(0, targetY);
-                document.documentElement.style.scrollSnapType = '';
-            }, 1200);
-        }
+        var targetIdx = diffY > 0 ? currentIdx + 1 : currentIdx - 1;
+        if (targetIdx < 0 || targetIdx >= sections.length) return;
+
+        var targetY = sections[targetIdx].offsetTop;
+        boosting = true;
+        document.documentElement.style.scrollSnapType = 'none';
+        window.scrollTo({ top: targetY, behavior: 'smooth' });
+        setTimeout(function() {
+            document.documentElement.style.scrollSnapType = '';
+            boosting = false;
+        }, 800);
     }, { passive: true });
 })();
 
