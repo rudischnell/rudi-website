@@ -745,46 +745,51 @@ if (scrollTopBtn) {
     });
 }
 
-// Mobile: Swipe boost – snap to next/prev section on fast swipe
+// Mobile: TikTok-style section navigation – one swipe = one section
 (function() {
     if (typeof window.ontouchstart === 'undefined') return;
     var sections = document.querySelectorAll('section[id]');
     if (!sections.length) return;
 
-    var touchStartY = 0, touchStartTime = 0, boosting = false;
+    var touchStartY = 0, isAnimating = false;
+    var minSwipe = 30; // minimum px to count as intentional swipe
+
+    function getCurrentIdx() {
+        var scrollY = window.scrollY;
+        var idx = 0;
+        for (var i = 0; i < sections.length; i++) {
+            if (sections[i].offsetTop <= scrollY + 10) idx = i;
+        }
+        return idx;
+    }
+
+    function goToSection(idx) {
+        if (idx < 0 || idx >= sections.length) return;
+        isAnimating = true;
+        document.documentElement.style.scrollSnapType = 'none';
+        window.scrollTo({ top: sections[idx].offsetTop, behavior: 'smooth' });
+        setTimeout(function() {
+            document.documentElement.style.scrollSnapType = '';
+            isAnimating = false;
+        }, 700);
+    }
 
     document.addEventListener('touchstart', function(e) {
         if (window.innerWidth > 768) return;
         touchStartY = e.touches[0].clientY;
-        touchStartTime = Date.now();
     }, { passive: true });
 
     document.addEventListener('touchend', function(e) {
-        if (window.innerWidth > 768 || boosting) return;
+        if (window.innerWidth > 768 || isAnimating) return;
         var diffY = touchStartY - e.changedTouches[0].clientY;
-        var elapsed = Date.now() - touchStartTime;
-        var velocity = Math.abs(diffY) / Math.max(elapsed, 1);
+        if (Math.abs(diffY) < minSwipe) return;
 
-        if (velocity < 0.5 || Math.abs(diffY) < 60) return;
-
-        // Find current section (last one whose top is at or above scroll)
-        var scrollY = window.scrollY;
-        var currentIdx = 0;
-        for (var i = 0; i < sections.length; i++) {
-            if (sections[i].offsetTop <= scrollY + 10) currentIdx = i;
+        var currentIdx = getCurrentIdx();
+        if (diffY > 0) {
+            goToSection(currentIdx + 1);
+        } else {
+            goToSection(currentIdx - 1);
         }
-
-        var targetIdx = diffY > 0 ? currentIdx + 1 : currentIdx - 1;
-        if (targetIdx < 0 || targetIdx >= sections.length) return;
-
-        var targetY = sections[targetIdx].offsetTop;
-        boosting = true;
-        document.documentElement.style.scrollSnapType = 'none';
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-        setTimeout(function() {
-            document.documentElement.style.scrollSnapType = '';
-            boosting = false;
-        }, 800);
     }, { passive: true });
 })();
 
