@@ -143,6 +143,15 @@ window.addEventListener('pageshow', function(e) {
         charIndex++;
     }
 
+    // Sync tagline fade-in with title character animation
+    if (heroTagline) {
+        var lastCharDelay = 0.2 + (plainTitle.length - 1) * 0.022;
+        var revealDuration = lastCharDelay + 0.2;
+        heroTagline.style.animation = 'none';
+        void heroTagline.offsetHeight;
+        heroTagline.style.animation = 'heroEntrance ' + revealDuration.toFixed(2) + 's cubic-bezier(0.16, 1, 0.3, 1) forwards';
+    }
+
     // Auto-shrink font so title always fits in one line
     function fitHeroTitle() {
         var container = heroH1.parentElement;

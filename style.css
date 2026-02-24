@@ -343,7 +343,7 @@ body {
     animation: heroEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.hero-tagline { animation-delay: 0.1s; }
+.hero-tagline { animation-delay: 0s; }
 .hero-description { animation-delay: 0.4s; }
 .hero-buttons { animation-delay: 0.55s; }
 
@@ -2165,9 +2165,9 @@ body {
 /* ===== Responsive: Layout ===== */
 @media (max-width: 768px) {
     .hero {
-        min-height: 100vh;
-        min-height: 100dvh;
+        height: 100dvh;
         padding: 110px 20px 48px;
+        overflow: hidden;
     }
 
     .hero h1 {
@@ -2193,18 +2193,21 @@ body {
         margin-bottom: 32px;
     }
 
+    .page-index .hero {
+        padding-top: 110px;
+    }
+
     .services,
     .portfolio,
     .contact {
-        min-height: 100vh;
-        min-height: 100dvh;
+        height: 100dvh;
+        overflow-y: auto;
         padding: 56px 0;
     }
 
     /* About + Footer share one viewport via wrapper */
     .about-footer-wrap {
-        min-height: 100vh;
-        min-height: 100dvh;
+        height: 100dvh;
         display: flex;
         flex-direction: column;
     }
@@ -2375,8 +2378,7 @@ body {
     }
 
     .hero {
-        min-height: 100vh;
-        min-height: 100dvh;
+        height: 100dvh;
     }
 }
 
