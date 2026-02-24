@@ -761,6 +761,30 @@ body {
     padding: 100px 0;
 }
 
+.portfolio-text {
+    max-width: 700px;
+    margin: 40px auto 0;
+    text-align: center;
+}
+
+.portfolio-text p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.7;
+    margin-bottom: 12px;
+}
+
+.portfolio-text a {
+    color: var(--color-accent);
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity var(--transition);
+}
+
+.portfolio-text a:hover {
+    opacity: 0.8;
+}
+
 /* Carousel */
 .carousel {
     position: relative;
@@ -2080,11 +2104,32 @@ body {
         margin-bottom: 32px;
     }
 
-    .about,
     .services,
     .portfolio,
     .contact {
         padding: 56px 0;
+    }
+
+    .about {
+        padding: 36px 0 16px;
+    }
+
+    .about .section-header {
+        margin-bottom: 16px;
+    }
+
+    .about-text p {
+        font-size: 0.85rem;
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+
+    .footer {
+        padding: 20px 0 16px;
+    }
+
+    .footer-tagline {
+        margin-bottom: 16px;
     }
 
     .about-grid {
@@ -2230,7 +2275,11 @@ body {
     .hero,
     .services,
     .portfolio,
-    .contact,
+    .contact {
+        scroll-snap-align: start;
+    }
+
+    /* About + Footer share one screen – snap to About, not Footer */
     .about {
         scroll-snap-align: start;
     }
@@ -2246,9 +2295,7 @@ body {
         scroll-margin-top: 12px;
     }
 
-    .footer {
-        scroll-snap-align: end;
-    }
+    /* Footer shares screen with About – no separate snap */
 }
 
 /* ===== Mobile: Floating Burger Button ===== */
