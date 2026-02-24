@@ -1094,6 +1094,88 @@ body {
     margin: 0 auto;
 }
 
+/* ===== Service Modal (Mobile) ===== */
+.service-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(10, 10, 12, 0.92);
+    backdrop-filter: blur(8px);
+    align-items: center;
+    justify-content: center;
+    padding: 40px 24px;
+}
+
+.service-modal.active {
+    display: flex;
+}
+
+.service-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity var(--transition);
+    z-index: 201;
+    line-height: 1;
+}
+
+.service-modal-close:hover {
+    opacity: 1;
+}
+
+.service-modal-content {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    padding: 24px;
+}
+
+.service-modal-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-accent-light);
+    color: var(--color-accent);
+    border-radius: 50%;
+    margin: 0 auto 24px;
+}
+
+.service-modal-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.service-modal-title {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 600;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #fff;
+    margin-bottom: 16px;
+}
+
+.service-modal-desc {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.7;
+    margin-bottom: 28px;
+}
+
+.service-modal-cta {
+    display: inline-block;
+}
+
 /* ===== Contact ===== */
 .contact {
     padding: 100px 0;
@@ -2183,18 +2265,11 @@ body {
     }
 
     .service-details {
-        grid-column: 1 / -1;
+        display: none;
     }
 
     .service-toggle {
-        grid-column: 1 / -1;
-        padding-top: 8px;
-    }
-
-    .service-toggle > svg {
-        width: 28px;
-        height: 28px;
-        stroke-width: 2.5;
+        display: none;
     }
 
     .form-row {

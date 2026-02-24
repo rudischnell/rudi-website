@@ -230,28 +230,112 @@ window.addEventListener('pagehide', forceScrollTop);
         if (!gridLocked) { initCards(); }
     });
 
+    // Service Modal (Mobile)
+    var serviceModal = document.getElementById('service-modal');
+    var isMobileModal = function() { return window.innerWidth <= 768; };
+
+    function openServiceModal(card) {
+        var modal = serviceModal;
+        if (!modal) return;
+
+        // Copy icon SVG
+        var iconSource = card.querySelector('.service-icon svg');
+        var modalIcon = modal.querySelector('.service-modal-icon');
+        if (iconSource && modalIcon) {
+            modalIcon.innerHTML = iconSource.outerHTML;
+        }
+
+        // Copy title
+        var title = card.querySelector('h3');
+        modal.querySelector('.service-modal-title').textContent = title ? title.textContent : '';
+
+        // Copy description from service-details
+        var descP = card.querySelector('.service-details p');
+        modal.querySelector('.service-modal-desc').textContent = descP ? descP.textContent : '';
+
+        // Copy CTA
+        var ctaSource = card.querySelector('.btn-service');
+        var ctaTarget = modal.querySelector('.service-modal-cta');
+        if (ctaSource && ctaTarget) {
+            ctaTarget.textContent = ctaSource.textContent;
+            ctaTarget.href = ctaSource.href;
+        }
+
+        // Store subject for CTA
+        modal.dataset.subject = card.getAttribute('data-subject') || '';
+
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeServiceModal() {
+        if (!serviceModal) return;
+        serviceModal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Close button
+    if (serviceModal) {
+        serviceModal.querySelector('.service-modal-close').addEventListener('click', closeServiceModal);
+
+        // Backdrop click
+        serviceModal.addEventListener('click', function(e) {
+            if (e.target === serviceModal) closeServiceModal();
+        });
+
+        // CTA click: close modal, scroll to contact, pre-select subject
+        var modalCta = serviceModal.querySelector('.service-modal-cta');
+        if (modalCta) {
+            modalCta.addEventListener('click', function(e) {
+                e.preventDefault();
+                var subject = serviceModal.dataset.subject || '';
+                closeServiceModal();
+
+                var select = document.getElementById('subject');
+                if (select && subject) {
+                    for (var i = 0; i < select.options.length; i++) {
+                        if (select.options[i].value === subject) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                var target = document.getElementById('contact');
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.classList.remove('section-arrive');
+                    void target.offsetWidth;
+                    target.classList.add('section-arrive');
+                    target.addEventListener('animationend', function onEnd() {
+                        target.classList.remove('section-arrive');
+                        target.removeEventListener('animationend', onEnd);
+                    });
+                }
+            });
+        }
+    }
+
+    // Escape key closes modal
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && serviceModal && serviceModal.classList.contains('active')) {
+            closeServiceModal();
+        }
+    });
+
     cards.forEach(function(card) {
         card.addEventListener('click', function(e) {
             if (e.target.closest('.btn-service')) return;
+
+            // Mobile: open modal instead of expanding
+            if (isMobileModal()) {
+                openServiceModal(card);
+                return;
+            }
+
             var wasActive = card.classList.contains('active');
 
             cards.forEach(function(c) { if (c !== card) c.classList.remove('active'); });
             card.classList.toggle('active', !wasActive);
-
-            // Mobile: scroll to card on open, back to section on close
-            if (isSingleOrTwoCol()) {
-                if (!wasActive) {
-                    setTimeout(function() {
-                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 350);
-                } else if (!grid.querySelector('.service-card.active')) {
-                    var servicesSection = grid.closest('section');
-                    if (servicesSection) {
-                        servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }
-                return;
-            }
 
             // Grid-Locking nur auf Desktop
             if (isSingleOrTwoCol()) return;
