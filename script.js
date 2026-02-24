@@ -794,15 +794,28 @@ if (scrollTopBtn) {
         }
 
         if (target) {
-            // Kill native momentum, then let browser handle smooth scroll
+            // Kill native momentum, scroll to exact section top
             document.documentElement.style.scrollSnapType = 'none';
             document.documentElement.style.overflow = 'hidden';
             void document.documentElement.offsetHeight;
             document.documentElement.style.overflow = '';
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            var targetY = target.offsetTop;
+            window.scrollTo({ top: targetY, behavior: 'smooth' });
+            // Re-enable snap only after scroll has fully settled
+            var checkInterval = setInterval(function() {
+                if (Math.abs(window.scrollY - targetY) < 2) {
+                    clearInterval(checkInterval);
+                    // Correct any sub-pixel drift
+                    window.scrollTo(0, targetY);
+                    document.documentElement.style.scrollSnapType = '';
+                }
+            }, 50);
+            // Safety fallback
             setTimeout(function() {
+                clearInterval(checkInterval);
+                window.scrollTo(0, targetY);
                 document.documentElement.style.scrollSnapType = '';
-            }, 800);
+            }, 1200);
         }
     }, { passive: true });
 })();
