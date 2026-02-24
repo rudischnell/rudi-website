@@ -2268,10 +2268,10 @@ body {
     }
 }
 
-/* ===== Mobile: Scroll-Snap (smooth proximity) ===== */
+/* ===== Mobile: Scroll-Snap ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y proximity;
+        scroll-snap-type: y mandatory;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
