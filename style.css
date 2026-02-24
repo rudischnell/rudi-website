@@ -2201,9 +2201,17 @@ body {
         padding: 56px 0;
     }
 
-    /* About + Footer share one viewport height */
+    /* About fills full viewport, footer sits at the bottom */
     .about {
+        min-height: 100vh;
+        min-height: 100dvh;
         padding: 36px 0 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .about > .container {
+        flex: 1;
     }
 
     .about .section-header {
@@ -2216,12 +2224,12 @@ body {
         line-height: 1.6;
     }
 
-    .footer {
-        padding: 20px 0 16px;
+    .page-index .footer {
+        padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
     }
 
     .footer-tagline {
-        margin-bottom: 16px;
+        margin-bottom: 12px;
     }
 
     .about-grid {
@@ -2360,7 +2368,8 @@ body {
     .hero,
     .services,
     .portfolio,
-    .contact {
+    .contact,
+    .about {
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }

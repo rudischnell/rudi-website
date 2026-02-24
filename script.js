@@ -1,44 +1,10 @@
 // Page load – ensure body is always visible (safety net)
 document.body.style.opacity = '1';
 
-// Central snap controller – prevents conflicting timeouts
-var snapTimer = null;
-function disableSnap() {
-    if (snapTimer) { clearTimeout(snapTimer); snapTimer = null; }
-    document.documentElement.style.scrollSnapType = 'none';
-}
-function enableSnap(delay) {
-    if (snapTimer) clearTimeout(snapTimer);
-    snapTimer = setTimeout(function() {
-        document.documentElement.style.scrollSnapType = '';
-        snapTimer = null;
-    }, delay || 0);
-}
-
-// Always scroll to top on page load/refresh (Safari-hardened)
+// Scroll restoration: manual so browser doesn't fight our positioning
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
-disableSnap();
-
-function forceScrollTop() {
-    window.scrollTo(0, 0);
-}
-
-function hasUrlHash() {
-    var h = window.location.hash;
-    // Before DOM ready, just check if hash exists (don't querySelector)
-    if (!h || h.length <= 1) return false;
-    try { return !!document.querySelector(h); } catch(e) { return false; }
-}
-
-// Early scroll-to-top only if no hash
-if (!window.location.hash || window.location.hash.length <= 1) {
-    window.scrollTo(0, 0);
-}
-
-function scrollToHash() {
-    var target = document.querySelector(window.location.hash);
-    if (!target) return;
+function scrollToTarget(target) {
     var mobile = window.innerWidth <= 768;
     if (mobile) {
         target.scrollIntoView({ block: 'start' });
@@ -49,37 +15,31 @@ function scrollToHash() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    if (hasUrlHash()) {
-        scrollToHash();
-    } else {
-        forceScrollTop();
+function handleInitialScroll() {
+    var hash = window.location.hash;
+    if (hash && hash.length > 1) {
+        try {
+            var target = document.querySelector(hash);
+            if (target) {
+                scrollToTarget(target);
+                return;
+            }
+        } catch(e) {}
     }
-});
+    window.scrollTo(0, 0);
+}
+
+// Position page on load – no snap manipulation needed, CSS handles snap
+handleInitialScroll();
+document.addEventListener('DOMContentLoaded', handleInitialScroll);
 window.addEventListener('load', function() {
-    if (hasUrlHash()) {
-        scrollToHash();
-        // Re-scroll after fonts/layout settle to ensure correct position
-        setTimeout(scrollToHash, 100);
-        setTimeout(scrollToHash, 300);
-        enableSnap(500);
-    } else {
-        forceScrollTop();
-        enableSnap(200);
-    }
+    handleInitialScroll();
+    // Re-scroll after fonts settle
+    setTimeout(handleInitialScroll, 150);
 });
 
 window.addEventListener('pageshow', function(e) {
-    if (e.persisted) {
-        disableSnap();
-        if (window.scrollY < 10) forceScrollTop();
-        enableSnap(200);
-    }
-    if (window.scrollY < 10) {
-        forceScrollTop();
-        setTimeout(forceScrollTop, 0);
-        setTimeout(forceScrollTop, 50);
-    }
+    if (e.persisted) handleInitialScroll();
 });
 
 // Pre-select contact subject from URL parameter (e.g. ?subject=Shop-Anfrage)
@@ -513,7 +473,7 @@ document.querySelectorAll('.nav-logo[href^="#"]').forEach(function(logo) {
     });
 });
 
-// Anchor navigation – instant scroll + subtle section highlight
+// Anchor navigation – scroll to section, let CSS snap handle landing
 document.querySelectorAll('a[href^="#"]').forEach(function(link) {
     link.addEventListener('click', function(e) {
         if (link.classList.contains('nav-logo')) return; // handled above
@@ -524,20 +484,18 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         e.preventDefault();
 
         var mobile = window.innerWidth <= 768;
-        var headerOffset = mobile ? 0 : 88;
-        var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
-
         if (mobile) {
-            // Scroll directly to the section – CSS mandatory snap ensures precise landing
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         } else {
+            var headerOffset = 88;
+            var targetY = target.getBoundingClientRect().top + window.scrollY - headerOffset;
             window.scrollTo(0, targetY);
         }
         history.pushState(null, null, hash);
 
         // Highlight target section briefly
         target.classList.remove('section-arrive');
-        void target.offsetWidth; // force reflow to restart animation
+        void target.offsetWidth;
         target.classList.add('section-arrive');
         var onEnd = function() {
             target.classList.remove('section-arrive');
