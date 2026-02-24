@@ -2416,9 +2416,7 @@ body {
         outline: none;
         opacity: 1;
         pointer-events: all;
-        transition: opacity 0.35s ease, background 0.2s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        perspective: 120px;
-        transform-style: preserve-3d;
+        transition: opacity 0.35s ease, background 0.2s ease, transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
     [data-theme="light"] .nav-toggle-floating {
@@ -2444,9 +2442,9 @@ body {
         transform: rotate(0deg);
     }
 
-    /* Open: X shape + coinflip on container */
+    /* Open: coinflip + X shape */
     .nav-toggle-floating.active {
-        animation: coinflip 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        transform: perspective(120px) rotateY(180deg);
     }
 
     .nav-toggle-floating.active span:nth-child(1) {
@@ -2455,24 +2453,6 @@ body {
 
     .nav-toggle-floating.active span:nth-child(2) {
         transform: rotate(-45deg);
-    }
-
-    @keyframes coinflip {
-        0% {
-            transform: rotateY(0deg) translateY(0);
-        }
-        40% {
-            transform: rotateY(90deg) translateY(-3px);
-        }
-        70% {
-            transform: rotateY(180deg) translateY(-1px);
-        }
-        85% {
-            transform: rotateY(180deg) translateY(1px);
-        }
-        100% {
-            transform: rotateY(180deg) translateY(0);
-        }
     }
 }
 
