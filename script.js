@@ -240,21 +240,15 @@ window.addEventListener('pagehide', forceScrollTop);
 
             // Mobile: scroll to card on open, back to section on close
             if (isSingleOrTwoCol()) {
-                var anyActive = grid.querySelector('.service-card.active') !== null;
-
                 if (!wasActive) {
-                    // Opening a card: disable snap so user can scroll within expanded card
-                    disableSnap();
                     setTimeout(function() {
                         card.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 350);
-                } else if (!anyActive) {
-                    // All cards closed: scroll back to section and re-enable snap
+                } else if (!grid.querySelector('.service-card.active')) {
                     var servicesSection = grid.closest('section');
                     if (servicesSection) {
                         servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
-                    enableSnap(600);
                 }
                 return;
             }
@@ -276,21 +270,6 @@ window.addEventListener('pagehide', forceScrollTop);
         });
     });
 
-    // Auto-close cards when user leaves the services section (restores snap)
-    var servicesSection = grid.closest('section');
-    if (servicesSection) {
-        var leaveObserver = new IntersectionObserver(function(entries) {
-            if (!entries[0].isIntersecting && window.innerWidth <= 768) {
-                var anyActive = grid.querySelector('.service-card.active');
-                if (anyActive) {
-                    cards.forEach(function(c) { c.classList.remove('active'); });
-                    enableSnap(0);
-                }
-            }
-        }, { threshold: 0 });
-        leaveObserver.observe(servicesSection);
-    }
-
     // CTA buttons: scroll to contact and pre-select subject
     document.querySelectorAll('.btn-service').forEach(function(btn) {
         btn.addEventListener('click', function(e) {
@@ -306,12 +285,8 @@ window.addEventListener('pagehide', forceScrollTop);
                     }
                 }
             }
-            // Close any open cards before navigating away
-            cards.forEach(function(c) { c.classList.remove('active'); });
-
             var target = document.getElementById('contact');
             if (target) {
-                enableSnap(0);
                 var mobile = window.innerWidth <= 768;
                 if (mobile) {
                     target.scrollIntoView({ behavior: 'smooth', block: 'start' });

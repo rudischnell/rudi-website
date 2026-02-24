@@ -2268,10 +2268,10 @@ body {
     }
 }
 
-/* ===== Mobile: Scroll-Snap (soft proximity) ===== */
+/* ===== Mobile: Scroll-Snap (smooth proximity) ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
     }
@@ -2279,23 +2279,16 @@ body {
     .hero,
     .services,
     .portfolio,
-    .contact {
-        scroll-snap-align: start;
-    }
-
-    /* About + Footer share one screen – snap to About, not Footer */
+    .contact,
     .about {
         scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 
     .hero {
         min-height: 100vh;
         min-height: 100dvh;
     }
-
-    /* Service cards: no own snap point – JS handles scroll positioning */
-
-    /* Footer shares screen with About – no separate snap */
 }
 
 /* ===== Mobile: Floating Burger Button ===== */
