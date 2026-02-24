@@ -247,8 +247,11 @@ window.addEventListener('pagehide', forceScrollTop);
                 document.documentElement.style.scrollSnapType = 'none';
 
                 if (!wasActive) {
-                    // Opening a card – scroll to it
-                    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    // Opening a card – wait for close animation of previous card
+                    // to settle layout, then scroll to the newly opened card
+                    setTimeout(function() {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 350);
                 } else if (!anyActive) {
                     // Closed last card – scroll back to services section
                     var servicesSection = grid.closest('section');
