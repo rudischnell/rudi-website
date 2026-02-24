@@ -48,6 +48,7 @@
 html {
     scroll-padding-top: 88px;
     scroll-padding-top: calc(88px + env(safe-area-inset-top, 0px));
+    overscroll-behavior-y: none;
 }
 
 /* Anchor navigation: subtle highlight pulse on target section */
@@ -185,20 +186,33 @@ body {
 
 .nav-toggle {
     display: none;
-    flex-direction: column;
-    gap: 5px;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     cursor: pointer;
     padding: 4px;
+    width: 32px;
+    height: 32px;
+    position: relative;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .nav-toggle span {
-    width: 24px;
-    height: 2px;
+    position: absolute;
+    width: 22px;
+    height: 3px;
     background: var(--color-text);
     border-radius: 2px;
-    transition: var(--transition);
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.nav-toggle span:nth-child(1) {
+    transform: rotate(90deg);
+}
+
+.nav-toggle span:nth-child(2) {
+    transform: rotate(0deg);
 }
 
 /* ===== Texture Overlays ===== */
@@ -1224,6 +1238,15 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
+@keyframes fadeOutDissolve {
+    0% { opacity: 1; transform: scale(1); filter: blur(0); }
+    100% { opacity: 0; transform: scale(0.95); filter: blur(6px); }
+}
+
+.form-success.dissolving {
+    animation: fadeOutDissolve 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
 /* ===== Footer ===== */
 .footer {
     background: transparent;
@@ -1972,16 +1995,8 @@ body {
         visibility: visible;
     }
 
-    .nav-toggle.active span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
-    }
-
-    .nav-toggle.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .nav-toggle.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -5px);
+    .nav-toggle.active {
+        transform: rotate(45deg);
     }
 
     .theme-toggle {
@@ -2042,16 +2057,16 @@ body {
 
     .hero h1 {
         font-size: 2.8rem;
-        margin-bottom: 16px;
+        margin-bottom: 8px;
     }
 
     .hero-tagline {
-        margin-bottom: 16px;
+        margin-bottom: 6px;
         padding-left: 0;
     }
 
     .hero-description {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     .hero-buttons {
@@ -2083,10 +2098,21 @@ body {
         padding: 20px 18px;
     }
 
+    /* Icon + title side by side */
+    .service-card {
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        grid-template-rows: auto auto auto;
+        column-gap: 12px;
+        align-items: center;
+    }
+
     .service-icon {
         width: 36px;
         height: 36px;
-        margin-bottom: 12px;
+        margin-bottom: 0;
+        grid-row: 1;
+        grid-column: 1;
     }
 
     .service-icon svg {
@@ -2096,11 +2122,28 @@ body {
 
     .service-card h3 {
         font-size: 1.15rem;
-        margin-bottom: 8px;
+        margin-bottom: 0;
+        grid-row: 1;
+        grid-column: 2;
     }
 
     .service-summary {
-        font-size: 0.82rem;
+        display: none;
+    }
+
+    .service-details {
+        grid-column: 1 / -1;
+    }
+
+    .service-toggle {
+        grid-column: 1 / -1;
+        padding-top: 8px;
+    }
+
+    .service-toggle > svg {
+        width: 28px;
+        height: 28px;
+        stroke-width: 2.5;
     }
 
     .form-row {
@@ -2258,28 +2301,25 @@ body {
     }
 
     .nav-toggle-floating span {
+        position: absolute;
         width: 20px;
-        height: 2px;
+        height: 3px;
         background: var(--color-text);
         border-radius: 2px;
         display: block;
-        transition: var(--transition);
+        transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .nav-toggle-floating span + span {
-        margin-top: 4px;
+    .nav-toggle-floating span:nth-child(1) {
+        transform: rotate(90deg);
     }
 
-    .nav-toggle-floating.active span:nth-child(1) {
-        transform: rotate(45deg) translate(4px, 4px);
+    .nav-toggle-floating span:nth-child(2) {
+        transform: rotate(0deg);
     }
 
-    .nav-toggle-floating.active span:nth-child(2) {
-        opacity: 0;
-    }
-
-    .nav-toggle-floating.active span:nth-child(3) {
-        transform: rotate(-45deg) translate(4px, -4px);
+    .nav-toggle-floating.active {
+        transform: rotate(45deg);
     }
 }
 

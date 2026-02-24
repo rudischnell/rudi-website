@@ -150,7 +150,12 @@ window.addEventListener('pagehide', forceScrollTop);
             heroH1.style.fontSize = size + 'px';
         }
     }
-    fitHeroTitle();
+    // Wait for fonts to load before first fit – prevents measuring with fallback font
+    if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(fitHeroTitle);
+    } else {
+        fitHeroTitle();
+    }
     window.addEventListener('resize', fitHeroTitle);
 })();
 
@@ -520,6 +525,55 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
 
     if (nextBtn) nextBtn.addEventListener('click', next);
     if (prevBtn) prevBtn.addEventListener('click', prev);
+
+    // === Desktop: Mouse drag support ===
+    var dragStartX = 0, dragDiffX = 0, isDragging = false;
+
+    wrapper.addEventListener('mousedown', function(e) {
+        if (isMobile() || isMoving) return;
+        isDragging = true;
+        dragStartX = e.clientX;
+        dragDiffX = 0;
+        track.style.transition = 'none';
+        wrapper.style.cursor = 'grabbing';
+        e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        dragDiffX = e.clientX - dragStartX;
+        var currentOffset = getSlideOffset(pos);
+        track.style.transform = 'translateX(' + (-currentOffset + dragDiffX) + 'px)';
+    });
+
+    window.addEventListener('mouseup', function() {
+        if (!isDragging) return;
+        isDragging = false;
+        wrapper.style.cursor = '';
+        // Determine if drag was enough to switch slide
+        var threshold = wrapper.clientWidth * 0.15;
+        if (dragDiffX < -threshold) {
+            next();
+        } else if (dragDiffX > threshold) {
+            prev();
+        } else {
+            setPos(pos, true);
+        }
+    });
+
+    // Prevent click on slides after drag
+    wrapper.addEventListener('click', function(e) {
+        if (Math.abs(dragDiffX) > 5) {
+            e.stopPropagation();
+            e.preventDefault();
+        }
+    }, true);
+
+    // Set grab cursor on desktop
+    if (!isMobile()) wrapper.style.cursor = 'grab';
+    window.addEventListener('resize', function() {
+        wrapper.style.cursor = isMobile() ? '' : 'grab';
+    });
 
     // === Mobile: Free native scroll with infinite loop reset ===
     function getOneSetWidth() {
@@ -1098,7 +1152,8 @@ if (contactForm) {
         }).then(function(response) {
             if (response.ok) {
                 contactForm.style.display = 'none';
-                document.getElementById('form-success').classList.add('visible');
+                var successEl = document.getElementById('form-success');
+                successEl.classList.add('visible');
                 // Scroll to top of contact section so success message is visible
                 var contactSection = document.getElementById('contact');
                 if (contactSection) {
@@ -1106,6 +1161,13 @@ if (contactForm) {
                     var targetY = contactSection.getBoundingClientRect().top + window.scrollY - offset;
                     window.scrollTo({ top: targetY, behavior: 'smooth' });
                 }
+                // Dissolve success message after 4 seconds
+                setTimeout(function() {
+                    successEl.classList.add('dissolving');
+                    successEl.addEventListener('animationend', function() {
+                        successEl.classList.remove('visible', 'dissolving');
+                    }, { once: true });
+                }, 4000);
             } else {
                 submitBtn.textContent = isEN ? 'Error – try again' : 'Fehler – nochmal versuchen';
                 submitBtn.disabled = false;
