@@ -2201,17 +2201,21 @@ body {
         padding: 56px 0;
     }
 
-    /* About fills full viewport, footer sits at the bottom */
-    .about {
+    /* About + Footer share one viewport via wrapper */
+    .about-footer-wrap {
         min-height: 100vh;
         min-height: 100dvh;
-        padding: 36px 0 0;
         display: flex;
         flex-direction: column;
     }
 
-    .about > .container {
+    .about-footer-wrap .about {
         flex: 1;
+        padding: 36px 0 0;
+    }
+
+    .about-footer-wrap .footer {
+        padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
     }
 
     .about .section-header {
@@ -2222,10 +2226,6 @@ body {
         font-size: 0.85rem;
         margin-bottom: 10px;
         line-height: 1.6;
-    }
-
-    .page-index .footer {
-        padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
     }
 
     .footer-tagline {
@@ -2369,7 +2369,7 @@ body {
     .services,
     .portfolio,
     .contact,
-    .about {
+    .about-footer-wrap {
         scroll-snap-align: start;
         scroll-snap-stop: always;
     }
