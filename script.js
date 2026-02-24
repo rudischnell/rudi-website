@@ -753,36 +753,6 @@ if (scrollTopBtn) {
 
     var touchStartY = 0, touchStartTime = 0;
 
-    // Smooth scroll with custom easing (slow start, gentle deceleration)
-    function easedScrollTo(targetY, duration) {
-        var startY = window.scrollY;
-        var diff = targetY - startY;
-        var startTime = null;
-
-        function easeInOutCubic(t) {
-            return t < 0.5
-                ? 4 * t * t * t
-                : 1 - Math.pow(-2 * t + 2, 3) / 2;
-        }
-
-        function step(time) {
-            if (!startTime) startTime = time;
-            var elapsed = time - startTime;
-            var progress = Math.min(elapsed / duration, 1);
-            var easedProgress = easeInOutCubic(progress);
-            window.scrollTo(0, startY + diff * easedProgress);
-            if (progress < 1) {
-                requestAnimationFrame(step);
-            } else {
-                // Re-enable snap after animation completes
-                document.documentElement.style.scrollSnapType = '';
-            }
-        }
-
-        document.documentElement.style.scrollSnapType = 'none';
-        requestAnimationFrame(step);
-    }
-
     document.addEventListener('touchstart', function(e) {
         if (window.innerWidth > 768) return;
         touchStartY = e.touches[0].clientY;
@@ -825,8 +795,15 @@ if (scrollTopBtn) {
         }
 
         if (target) {
-            var targetY = target.offsetTop;
-            easedScrollTo(targetY, 700);
+            // Kill native momentum, then let browser handle smooth scroll
+            document.documentElement.style.scrollSnapType = 'none';
+            document.documentElement.style.overflow = 'hidden';
+            void document.documentElement.offsetHeight;
+            document.documentElement.style.overflow = '';
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(function() {
+                document.documentElement.style.scrollSnapType = '';
+            }, 800);
         }
     }, { passive: true });
 })();
