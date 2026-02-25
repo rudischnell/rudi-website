@@ -429,7 +429,15 @@ themeToggle.addEventListener('click', toggleTheme);
 var themeToggleMobile = document.getElementById('theme-toggle-mobile');
 if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 var themeTogglePeek = document.getElementById('theme-toggle-peek');
-if (themeTogglePeek) themeTogglePeek.addEventListener('click', toggleTheme);
+if (themeTogglePeek) {
+    themeTogglePeek.addEventListener('click', function() {
+        themeTogglePeek.style.zIndex = '102';
+        toggleTheme();
+        setTimeout(function() {
+            themeTogglePeek.style.zIndex = '';
+        }, 500);
+    });
+}
 
 // Mobile Navigation Toggle
 const navToggle = document.getElementById('nav-toggle');
@@ -595,6 +603,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
             pos = target;
             setPos(pos, true);
             updateDots();
+            updatePrevVisibility();
         });
         dotsContainer.appendChild(dot);
     }
@@ -607,12 +616,23 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         });
     }
 
+    function updatePrevVisibility() {
+        if (prevBtn) {
+            if (pos > 0) {
+                prevBtn.classList.add('visible');
+            } else {
+                prevBtn.classList.remove('visible');
+            }
+        }
+    }
+
     function next() {
         if (isMoving) return;
         isMoving = true;
         pos++;
         setPos(pos, true);
         updateDots();
+        updatePrevVisibility();
     }
 
     function prev() {
@@ -621,6 +641,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         pos--;
         setPos(pos, true);
         updateDots();
+        updatePrevVisibility();
     }
 
     track.addEventListener('transitionend', function() {
@@ -629,6 +650,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
             setPos(pos, false);
         }
         isMoving = false;
+        updatePrevVisibility();
     });
 
     if (nextBtn) nextBtn.addEventListener('click', next);
@@ -667,6 +689,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function(link) {
         } else {
             setPos(pos, true);
         }
+        updatePrevVisibility();
     });
 
     // Prevent click on slides after drag
