@@ -24,8 +24,6 @@
         border: '#b8bbc0'
     };
     var c = theme === 'light' ? light : dark;
-    var logo = theme === 'light' ? 'images/logo-light.png' : 'images/logo-dark.png';
-
     // Build overlay
     var overlay = document.createElement('div');
     overlay.id = 'maintenance-wall';
@@ -46,7 +44,6 @@
     ].join(';'));
 
     overlay.innerHTML =
-        '<img src="' + logo + '" alt="rudischnell.studio" style="width:min(260px,60vw);margin-bottom:2.5rem;opacity:.85">' +
         '<h1 style="font-family:\'Barlow Condensed\',\'Arial Narrow\',Arial,sans-serif;' +
             'font-size:clamp(1.6rem,5vw,2.8rem);font-weight:700;letter-spacing:.02em;' +
             'line-height:1.2;margin-bottom:1rem;color:' + c.text + '">' +
