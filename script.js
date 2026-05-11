@@ -92,11 +92,11 @@ window.addEventListener('pageshow', function(e) {
 
     const variations = isEnglish ? [
         { title: 'CREATIVE FOR YOU!', accent: 'YOU!', tagline: 'CONCEPT \u00b7 GRAPHICS \u00b7 PRINT' },
-        { title: 'RUDISCHNELL.STUDIO', accent: '.STUDIO', tagline: 'HONEST \u00b7 DIRECT \u00b7 SIMPLE' },
+        { title: 'RALLIES.STUDIO', accent: '.STUDIO', tagline: 'FAST \u00b7 DIRECT \u00b7 CREATIVE' },
         { title: 'Design & Workshops', accent: '&', tagline: 'SCREEN \u00b7 PAPER \u00b7 EDUCATION' }
     ] : [
         { title: 'KREATIV F\u00dcR DICH!', accent: 'DICH!', tagline: 'KONZEPT \u00b7 GRAFIK \u00b7 DRUCK' },
-        { title: 'RUDISCHNELL.STUDIO', accent: '.STUDIO', tagline: 'EHRLICH \u00b7 DIREKT \u00b7 EINFACH' },
+        { title: 'RALLIES.STUDIO', accent: '.STUDIO', tagline: 'SCHNELL \u00b7 DIREKT \u00b7 KREATIV' },
         { title: 'Design & Workshops', accent: '&', tagline: 'BILDSCHIRM \u00b7 PAPIER \u00b7 BILDUNG' }
     ];
 

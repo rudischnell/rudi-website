@@ -1,9 +1,13 @@
 /* =============================================
-   MAINTENANCE MODE
-   Remove this script (or the <script> tags in each HTML file)
-   to re-enable the website.
+   SICHTSCHUTZ
+   Setzt SICHTSCHUTZ_AKTIV auf true, um die Seite
+   hinter einem Overlay zu verstecken.
    ============================================= */
+var SICHTSCHUTZ_AKTIV = false;
+
 (function () {
+    if (!SICHTSCHUTZ_AKTIV) return;
+
     // Detect saved theme preference
     var theme = localStorage.getItem('theme') ||
         (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
@@ -26,7 +30,7 @@
     var c = theme === 'light' ? light : dark;
     // Build overlay
     var overlay = document.createElement('div');
-    overlay.id = 'maintenance-wall';
+    overlay.id = 'sichtschutz-wall';
     overlay.setAttribute('style', [
         'position:fixed',
         'inset:0',
@@ -56,7 +60,7 @@
     // Hide everything else as soon as possible
     var style = document.createElement('style');
     style.textContent =
-        'body>*:not(#maintenance-wall){display:none!important}' +
+        'body>*:not(#sichtschutz-wall){display:none!important}' +
         'body{overflow:hidden!important;background:' + c.bg + '!important}';
 
     // Inject immediately (works even in <head>)
