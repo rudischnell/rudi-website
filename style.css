@@ -2275,11 +2275,11 @@ body {
 
     .about-footer-wrap .about {
         flex: 1;
-        padding: 36px 0 0;
+        padding: 24px 0 0;
     }
 
     .about-footer-wrap .footer {
-        padding: 12px 0 max(12px, env(safe-area-inset-bottom, 0px));
+        padding: 6px 0 max(8px, env(safe-area-inset-bottom, 0px));
     }
 
     .about .section-header {
@@ -2293,7 +2293,11 @@ body {
     }
 
     .footer-tagline {
-        margin-bottom: 12px;
+        margin-bottom: 6px;
+    }
+
+    .footer-bottom {
+        padding-top: 8px;
     }
 
     .about-grid {
