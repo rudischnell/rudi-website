@@ -2216,9 +2216,7 @@ body {
         height: var(--appvh, 100svh);
         min-height: 0;
         padding: 110px 20px 48px;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
     }
 
     .hero-blob {
@@ -2260,7 +2258,12 @@ body {
     }
 
     .services,
-    .portfolio,
+    .portfolio {
+        height: var(--appvh, 100svh);
+        overflow: hidden;
+        padding: 56px 0;
+    }
+
     .contact {
         height: var(--appvh, 100svh);
         overflow-y: auto;
@@ -2274,9 +2277,7 @@ body {
         height: var(--appvh, 100svh);
         display: flex;
         flex-direction: column;
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
     }
 
     .about-footer-wrap .about {
