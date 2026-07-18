@@ -3,7 +3,7 @@
    Setzt SICHTSCHUTZ_AKTIV auf true, um die Seite
    hinter einem Overlay zu verstecken.
    ============================================= */
-var SICHTSCHUTZ_AKTIV = false;
+var SICHTSCHUTZ_AKTIV = true;
 
 (function () {
     if (!SICHTSCHUTZ_AKTIV) return;
