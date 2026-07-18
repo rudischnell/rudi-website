@@ -2258,17 +2258,10 @@ body {
     }
 
     .services,
-    .portfolio {
-        height: var(--appvh, 100svh);
-        overflow: hidden;
-        padding: 56px 0;
-    }
-
+    .portfolio,
     .contact {
         height: var(--appvh, 100svh);
-        overflow-y: auto;
-        overscroll-behavior: contain;
-        -webkit-overflow-scrolling: touch;
+        overflow: hidden;
         padding: 56px 0;
     }
 
