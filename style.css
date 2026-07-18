@@ -2213,7 +2213,7 @@ body {
 /* ===== Responsive: Layout ===== */
 @media (max-width: 768px) {
     .hero {
-        height: var(--appvh, 100svh);
+        height: 100dvh;
         min-height: 0;
         padding: 110px 20px 48px;
         overflow: hidden;
@@ -2260,14 +2260,14 @@ body {
     .services,
     .portfolio,
     .contact {
-        height: var(--appvh, 100svh);
+        height: 100dvh;
         overflow: hidden;
         padding: 56px 0;
     }
 
     /* About + Footer share one viewport via wrapper */
     .about-footer-wrap {
-        height: var(--appvh, 100svh);
+        height: 100dvh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
