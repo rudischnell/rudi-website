@@ -18,6 +18,7 @@
     --color-hero-text: #d0d2d8;
     --color-nav-bg: rgba(19, 19, 19, 0.90);
     --color-nav-mobile-bg: rgba(19, 19, 19, 0.98);
+    --color-blob: #E15226;
     --font-heading: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif;
     --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-accent: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -41,6 +42,7 @@
     --color-hero-text: #3a3d44;
     --color-nav-bg: rgba(205, 206, 209, 0.92);
     --color-nav-mobile-bg: rgba(205, 206, 209, 0.98);
+    --color-blob: #E15226;
     --shadow: 0 2px 8px rgba(58, 61, 68, 0.18);
     --shadow-lg: 0 8px 24px rgba(58, 61, 68, 0.22);
 }
@@ -316,6 +318,33 @@ body {
     background: transparent;
     color: var(--color-hero-text);
     padding: 120px 24px 80px;
+}
+
+/* Hero blob decoration */
+.hero-blob {
+    position: absolute;
+    right: 8%;
+    bottom: -2%;
+    width: 500px;
+    height: auto;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* Paint drip stripe — runs from hero to footer */
+.paint-drip {
+    position: absolute;
+    right: calc(8% + 200px);
+    top: 100vh;
+    width: 40px;
+    height: calc(100% - 100vh);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.paint-drip svg {
+    width: 100%;
+    height: 100%;
 }
 
 .hero-content {
@@ -2185,9 +2214,21 @@ body {
 @media (max-width: 768px) {
     .hero {
         height: 100dvh;
+        height: 100svh;
         min-height: 0;
         padding: 110px 20px 48px;
         overflow: hidden;
+    }
+
+    .hero-blob {
+        width: 250px;
+        right: -8%;
+        bottom: -5%;
+    }
+
+    .paint-drip {
+        right: calc(-8% + 100px);
+        width: 28px;
     }
 
     .hero h1 {
@@ -2220,14 +2261,16 @@ body {
     .services,
     .portfolio,
     .contact {
-        height: 100dvh;
-        overflow-y: auto;
+        height: auto;
+        min-height: 100svh;
+        overflow: visible;
         padding: 56px 0;
     }
 
     /* About + Footer share one viewport via wrapper */
     .about-footer-wrap {
         height: 100dvh;
+        height: 100svh;
         display: flex;
         flex-direction: column;
     }
@@ -2383,9 +2426,10 @@ body {
 /* ===== Mobile: Scroll-Snap ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y mandatory;
+        scroll-snap-type: y proximity;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
     }
 
     .hero,
@@ -2394,7 +2438,6 @@ body {
     .contact,
     .about-footer-wrap {
         scroll-snap-align: start;
-        scroll-snap-stop: always;
     }
 }
 

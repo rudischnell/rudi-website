@@ -856,8 +856,8 @@ if (scrollTopBtn) {
     });
 }
 
-// Mobile swipe navigation is handled entirely by CSS scroll-snap-type: y mandatory.
-// No JS swipe handler needed – the browser natively snaps one section at a time.
+// Mobile swipe navigation is handled entirely by CSS scroll-snap-type: y proximity.
+// No JS swipe handler needed – the browser natively snaps sections with a soft glide.
 
 // Active nav highlighting with Intersection Observer
 (function() {
