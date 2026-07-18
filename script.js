@@ -5,11 +5,12 @@ document.body.style.opacity = '1';
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
 // Lock viewport height to real device height (prevents Safari toolbar jump)
+// NICHT auf resize hören — iOS feuert resize beim Toolbar-Ein/Ausblenden,
+// das würde --appvh mitten im Snap ändern und einen Ruck erzeugen.
 function lockVH(){
     document.documentElement.style.setProperty('--appvh', window.innerHeight + 'px');
 }
 if (window.innerWidth <= 768) lockVH();
-window.addEventListener('resize', lockVH);
 window.addEventListener('orientationchange', function(){ setTimeout(lockVH, 200); });
 
 function scrollToTarget(target) {
