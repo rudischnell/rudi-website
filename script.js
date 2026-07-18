@@ -4,6 +4,14 @@ document.body.style.opacity = '1';
 // Scroll restoration: manual so browser doesn't fight our positioning
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
+// Lock viewport height to real device height (prevents Safari toolbar jump)
+function lockVH(){
+    document.documentElement.style.setProperty('--appvh', window.innerHeight + 'px');
+}
+if (window.innerWidth <= 768) lockVH();
+window.addEventListener('resize', lockVH);
+window.addEventListener('orientationchange', function(){ setTimeout(lockVH, 200); });
+
 function scrollToTarget(target) {
     var mobile = window.innerWidth <= 768;
     if (mobile) {
@@ -856,8 +864,8 @@ if (scrollTopBtn) {
     });
 }
 
-// Mobile swipe navigation is handled entirely by CSS scroll-snap-type: y proximity.
-// No JS swipe handler needed – the browser natively snaps sections with a soft glide.
+// Mobile swipe navigation: CSS scroll-snap-type: y mandatory + JS --appvh lock.
+// Shorts-style paging – one swipe = exactly one section, no in-between stops.
 
 // Active nav highlighting with Intersection Observer
 (function() {

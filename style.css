@@ -2213,11 +2213,12 @@ body {
 /* ===== Responsive: Layout ===== */
 @media (max-width: 768px) {
     .hero {
-        height: 100dvh;
-        height: 100svh;
+        height: var(--appvh, 100svh);
         min-height: 0;
         padding: 110px 20px 48px;
-        overflow: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
     }
 
     .hero-blob {
@@ -2261,18 +2262,21 @@ body {
     .services,
     .portfolio,
     .contact {
-        height: auto;
-        min-height: 100svh;
-        overflow: visible;
+        height: var(--appvh, 100svh);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         padding: 56px 0;
     }
 
     /* About + Footer share one viewport via wrapper */
     .about-footer-wrap {
-        height: 100dvh;
-        height: 100svh;
+        height: var(--appvh, 100svh);
         display: flex;
         flex-direction: column;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
     }
 
     .about-footer-wrap .about {
@@ -2423,10 +2427,10 @@ body {
     }
 }
 
-/* ===== Mobile: Scroll-Snap ===== */
+/* ===== Mobile: Scroll-Snap (Shorts-style paging) ===== */
 @media (max-width: 768px) {
     html {
-        scroll-snap-type: y proximity;
+        scroll-snap-type: y mandatory;
         scroll-padding-top: 0px;
         -webkit-overflow-scrolling: touch;
         overscroll-behavior-y: contain;
@@ -2438,6 +2442,7 @@ body {
     .contact,
     .about-footer-wrap {
         scroll-snap-align: start;
+        scroll-snap-stop: always;
     }
 }
 
