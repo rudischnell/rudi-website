@@ -4,6 +4,10 @@ document.body.style.opacity = '1';
 // Scroll restoration: manual so browser doesn't fight our positioning
 if (history.scrollRestoration) history.scrollRestoration = 'manual';
 
+// Safe localStorage access (Safari private mode, storage full, etc.)
+function lsGet(key) { try { return localStorage.getItem(key); } catch(e) { return null; } }
+function lsSet(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
+
 
 function scrollToTarget(target) {
     var mobile = window.innerWidth <= 768;
@@ -102,7 +106,7 @@ window.addEventListener('pageshow', function(e) {
     ];
 
     // First visit: always show first variation; subsequent visits: random, no consecutive repeats
-    var storedIndex = localStorage.getItem('heroLastIndex');
+    var storedIndex = lsGet('heroLastIndex');
     var lastIndex = parseInt(storedIndex, 10);
     var idx;
     if (storedIndex === null) {
@@ -112,7 +116,7 @@ window.addEventListener('pageshow', function(e) {
             idx = Math.floor(Math.random() * variations.length);
         } while (idx === lastIndex && variations.length > 1);
     }
-    localStorage.setItem('heroLastIndex', idx);
+    lsSet('heroLastIndex', idx);
 
     var pick = variations[idx];
     if (heroTagline) heroTagline.textContent = pick.tagline;
@@ -406,7 +410,7 @@ window.addEventListener('pageshow', function(e) {
 
 // Theme Toggle (Dark Mode is default)
 const themeToggle = document.getElementById('theme-toggle');
-const savedTheme = localStorage.getItem('theme');
+const savedTheme = lsGet('theme');
 if (savedTheme) {
     document.documentElement.setAttribute('data-theme', savedTheme);
 }
@@ -419,7 +423,7 @@ function toggleTheme() {
     } else {
         document.documentElement.setAttribute('data-theme', 'light');
     }
-    localStorage.setItem('theme', next);
+    lsSet('theme', next);
 }
 
 if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
@@ -1023,13 +1027,13 @@ function closeCookieBanner() {
     if (banner) {
         banner.classList.remove('visible');
         banner.classList.add('hiding');
-        localStorage.setItem('cookieBannerClosed', 'true');
+        lsSet('cookieBannerClosed', 'true');
     }
 }
 
 (function() {
     var banner = document.getElementById('cookie-banner');
-    if (banner && !localStorage.getItem('cookieBannerClosed')) {
+    if (banner && !lsGet('cookieBannerClosed')) {
         setTimeout(function() { banner.classList.add('visible'); }, 500);
         setTimeout(function() {
             if (banner.classList.contains('visible') && !banner.classList.contains('hiding')) {
