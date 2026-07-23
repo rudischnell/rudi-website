@@ -1231,7 +1231,7 @@ if (contactForm) {
                 // Scroll to top of contact section so success message is visible
                 var contactSection = document.getElementById('contact');
                 if (contactSection) {
-                    var offset = 88 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-top)')) || 0);
+                    var offset = 88 + (parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0);
                     var targetY = contactSection.getBoundingClientRect().top + window.scrollY - offset;
                     window.scrollTo({ top: targetY, behavior: 'smooth' });
                 }

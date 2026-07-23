@@ -27,6 +27,7 @@
     --shadow: 0 2px 8px rgba(255, 255, 255, 0.13);
     --shadow-lg: 0 8px 24px rgba(255, 255, 255, 0.17);
     --transition: 0.3s ease;
+    --safe-top: env(safe-area-inset-top, 0px);
 }
 
 [data-theme="light"] {
