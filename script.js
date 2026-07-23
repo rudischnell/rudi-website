@@ -426,7 +426,7 @@ function toggleTheme() {
     localStorage.setItem('theme', next);
 }
 
-themeToggle.addEventListener('click', toggleTheme);
+if (themeToggle) themeToggle.addEventListener('click', toggleTheme);
 var themeToggleMobile = document.getElementById('theme-toggle-mobile');
 if (themeToggleMobile) themeToggleMobile.addEventListener('click', toggleTheme);
 var themeTogglePeek = document.getElementById('theme-toggle-peek');
@@ -446,20 +446,20 @@ const navLinks = document.getElementById('nav-links');
 const navFloating = document.getElementById('nav-toggle-floating');
 
 function openMobileMenu() {
-    navToggle.classList.add('active');
-    navLinks.classList.add('active');
-    navbar.classList.add('nav-menu-open');
+    if (navToggle) navToggle.classList.add('active');
+    if (navLinks) navLinks.classList.add('active');
+    if (navbar) navbar.classList.add('nav-menu-open');
     if (navFloating) navFloating.classList.add('active');
 }
 
 function closeMobileMenu() {
-    navToggle.classList.remove('active');
-    navLinks.classList.remove('active');
-    navbar.classList.remove('nav-menu-open');
+    if (navToggle) navToggle.classList.remove('active');
+    if (navLinks) navLinks.classList.remove('active');
+    if (navbar) navbar.classList.remove('nav-menu-open');
     if (navFloating) navFloating.classList.remove('active');
 }
 
-navToggle.addEventListener('click', () => {
+if (navToggle) navToggle.addEventListener('click', () => {
     if (navToggle.classList.contains('active')) {
         closeMobileMenu();
     } else {
@@ -479,7 +479,7 @@ if (navFloating) {
 }
 
 // Close mobile nav on link click (delay so anchor navigation fires first)
-navLinks.querySelectorAll('a').forEach(link => {
+if (navLinks) navLinks.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
         setTimeout(closeMobileMenu, 50);
     });
@@ -824,10 +824,12 @@ var scrollTopBtn = document.getElementById('scroll-top');
 var isMobileNav = function() { return window.innerWidth <= 768; };
 
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-        navbar.classList.add('scrolled');
-    } else {
-        navbar.classList.remove('scrolled');
+    if (navbar) {
+        if (window.scrollY > 50) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
     }
     // Show/hide scroll-to-top button after 35% of page
     if (scrollTopBtn) {
@@ -835,7 +837,7 @@ window.addEventListener('scroll', () => {
         scrollTopBtn.classList.toggle('visible', window.scrollY > heroEnd);
     }
     // Mobile: hide navbar after scrolling past hero, show floating burger
-    if (isMobileNav()) {
+    if (isMobileNav() && navbar) {
         var hideThreshold = window.innerHeight * 0.3;
         if (window.scrollY > hideThreshold) {
             navbar.classList.add('nav-hidden');
@@ -845,7 +847,7 @@ window.addEventListener('scroll', () => {
             if (navFloating) navFloating.classList.remove('visible');
             closeMobileMenu();
         }
-    } else {
+    } else if (navbar) {
         navbar.classList.remove('nav-hidden');
         if (navFloating) navFloating.classList.remove('visible');
     }
@@ -974,11 +976,13 @@ function lightboxNext() {
     showLightboxImage();
 }
 
-document.getElementById('lightbox-prev').addEventListener('click', function(e) {
+var lightboxPrevBtn = document.getElementById('lightbox-prev');
+var lightboxNextBtn = document.getElementById('lightbox-next');
+if (lightboxPrevBtn) lightboxPrevBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     lightboxPrev();
 });
-document.getElementById('lightbox-next').addEventListener('click', function(e) {
+if (lightboxNextBtn) lightboxNextBtn.addEventListener('click', function(e) {
     e.stopPropagation();
     lightboxNext();
 });
@@ -992,7 +996,7 @@ function closeLightbox(event) {
 
 document.addEventListener('keydown', function(e) {
     var lightbox = document.getElementById('lightbox');
-    if (!lightbox.classList.contains('active')) return;
+    if (!lightbox || !lightbox.classList.contains('active')) return;
     if (e.key === 'Escape') {
         lightbox.classList.remove('active');
         document.body.style.overflow = '';
@@ -1006,6 +1010,7 @@ document.addEventListener('keydown', function(e) {
 // Lightbox touch swipe
 (function() {
     var lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
     var startX = 0, diffX = 0;
     lightbox.addEventListener('touchstart', function(e) { startX = e.touches[0].clientX; }, { passive: true });
     lightbox.addEventListener('touchmove', function(e) { diffX = e.touches[0].clientX - startX; }, { passive: true });
