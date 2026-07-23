@@ -127,7 +127,6 @@ window.addEventListener('pageshow', function(e) {
     heroH1.style.animation = 'none';
 
     var charIndex = 0;
-    var spacing = pick.spacing || null;
     for (var i = 0; i < plainTitle.length; i++) {
         var ch = plainTitle[i];
         var span = document.createElement('span');
@@ -136,9 +135,6 @@ window.addEventListener('pageshow', function(e) {
         span.style.animationDelay = (0.2 + charIndex * 0.022) + 's';
         if (accentStart !== -1 && i >= accentStart && i < accentStart + accentStr.length) {
             span.classList.add('hero-accent');
-        }
-        if (spacing && i === spacing.pos) {
-            span.style.marginRight = spacing.width;
         }
         heroH1.appendChild(span);
         charIndex++;
