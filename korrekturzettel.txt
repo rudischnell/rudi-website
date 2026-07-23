@@ -1,0 +1,24 @@
+Bugs aktuell:
+
+A. Swipe hoch von 'Über' zu Kontaktformular landet zu tief, neues Kapitel abgeschnitten.
+B. Swipe von Homepage zu Angeboten landet immer noch flasch und springt dann. Ist die Homepage zu lang, oder was ist da los?
+
+C. swipe-tempo und -geschwindigkeit sollte KEINE rolle spielen, damit man immer sauber von Kapitel zu Kapitel swipt. Es gibt immer noch das Problem beim ersten Swipe von Homepage zu Angeboten. Es funktioniert aktuell (meistens), wenn man mit dem Finger von ganz oben nach ganz unten des Bildschirms wischt, aber das soll genauso mit einer kleinen Swipe-Bewegung flüssig und präzise ablaufen. Was ist das Problem an der extakten Ausrichtung eines Kapitels am Bildschirm beim swipen?
+
+Änderungswünsche:
+
+1. Während der Animation des Hero-Titels auf Homepage, soll gleichzeitig die Hero-Tagling mittels Deckkraft-Steigerung eingeblendet werden, damit beides gleichzeitig final dargestelt wird.
+
+2. Shop-Anfrage als Thema aus dem Kontaktformular entfernen, solange der Shop nicht zugänglich ist
+
+3. Themen für das Formular sollen sein (in alphabetischer Sortierung A-Z):
+
+Workshop; Design; Website; Projekt (verknüpft mit den jeweiligen Angebot-Buttons); Audio-format
+
+4. Hero-Titel "Rudi Schnell.Studio" soll "RUDISCHNELL.STUDIO", wieder ganz ohne Leerzeichen oder Extra-Abstand 
+
+5. Der Light-Toggle soll sichtbarer werden, ich möchte, dass dieser hinterm Burger-Icon zur hälfte verdeckt ist. also beide Felder an ihrer X-Achse ausgerichtet, der Lighttoggle dann zur Hälfte nach rechts geschoben (davon ausgehend, dass beide Icons gleiche Maßstäbe haben. Diese Änderung nur für Smartphone-Ansicht, Tablet und PC unverändert.
+
+
+Bitte alles umsetzen und pushen.
+
