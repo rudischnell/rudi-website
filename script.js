@@ -444,6 +444,7 @@ if (themeTogglePeek) {
 const navToggle = document.getElementById('nav-toggle');
 const navLinks = document.getElementById('nav-links');
 const navFloating = document.getElementById('nav-toggle-floating');
+const navbar = document.getElementById('navbar');
 
 function openMobileMenu() {
     if (navToggle) navToggle.classList.add('active');
@@ -819,7 +820,6 @@ document.querySelectorAll('.nav-links a, .nav-logo, .footer-bottom a, .lang-swit
 });
 
 // Navbar scroll effect + scroll-to-top button + mobile navbar hide
-const navbar = document.getElementById('navbar');
 var scrollTopBtn = document.getElementById('scroll-top');
 var isMobileNav = function() { return window.innerWidth <= 768; };
 
