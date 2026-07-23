@@ -321,31 +321,37 @@ body {
     padding: 120px 24px 80px;
 }
 
-/* Hero blob decoration */
-.hero-blob {
+/* Pixel-art motif — replaces the old paint-drip/blob (RALLIES Design System) */
+.pixel-drip-hero {
     position: absolute;
-    right: 8%;
-    bottom: -2%;
-    width: 500px;
-    height: auto;
+    right: 7%;
+    top: 16%;
+    bottom: 10%;
+    width: 260px;
     z-index: 1;
+    pointer-events: none;
+    opacity: 0.95;
+}
+
+.pixel-drip-divider {
+    position: relative;
+    width: 300px;
+    height: 90px;
+    margin: 40px auto 0;
     pointer-events: none;
 }
 
-/* Paint drip stripe — runs from hero to footer */
-.paint-drip {
+.pixel-sq {
     position: absolute;
-    right: calc(8% + 200px);
-    top: 100vh;
-    width: 40px;
-    height: calc(100% - 100vh);
-    z-index: 1;
-    pointer-events: none;
+    border-radius: 1px;
+    animation: rlPixelDrop 5s linear infinite;
 }
 
-.paint-drip svg {
-    width: 100%;
-    height: 100%;
+@keyframes rlPixelDrop {
+    0%   { transform: translateY(-30px); opacity: 0; }
+    30%  { opacity: 1; }
+    65%  { opacity: 1; }
+    100% { transform: translateY(420px); opacity: 0; }
 }
 
 .hero-content {
@@ -2220,15 +2226,14 @@ body {
         overflow: hidden;
     }
 
-    .hero-blob {
-        width: 250px;
-        right: -8%;
-        bottom: -5%;
+    .pixel-drip-hero {
+        width: 140px;
+        right: 2%;
     }
 
-    .paint-drip {
-        right: calc(-8% + 100px);
-        width: 28px;
+    .pixel-drip-divider {
+        width: 220px;
+        height: 70px;
     }
 
     .hero h1 {

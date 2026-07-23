@@ -60,36 +60,7 @@
     </button>
 
     <section class="hero" id="hero">
-        <svg class="hero-blob" aria-hidden="true" viewBox="0 0 600 900" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <radialGradient id="blob-3d" cx="38%" cy="35%" r="55%">
-                    <stop offset="0%" stop-color="#F4814A"/>
-                    <stop offset="45%" stop-color="#E15226"/>
-                    <stop offset="100%" stop-color="#9A2E0E"/>
-                </radialGradient>
-                <radialGradient id="blob-3d-sm" cx="40%" cy="30%" r="50%">
-                    <stop offset="0%" stop-color="#F4814A"/>
-                    <stop offset="50%" stop-color="#E15226"/>
-                    <stop offset="100%" stop-color="#8B2A0D"/>
-                </radialGradient>
-                <filter id="blob-shadow" x="-10%" y="-10%" width="130%" height="130%">
-                    <feDropShadow dx="4" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
-                </filter>
-                <filter id="blob-highlight" x="-5%" y="-5%" width="110%" height="110%">
-                    <feGaussianBlur in="SourceGraphic" stdDeviation="3"/>
-                </filter>
-            </defs>
-            <!-- Shadow layer -->
-            <path d="M360 310 C410 260, 520 275, 530 340 C540 405, 495 450, 470 500 C445 550, 480 580, 455 630 C430 680, 375 665, 350 620 C325 575, 295 530, 285 465 C275 400, 310 360, 360 310Z" fill="rgba(0,0,0,0.25)" filter="url(#blob-highlight)"/>
-            <!-- Main blob body — solid 3D -->
-            <path d="M370 300 C415 255, 515 270, 525 335 C535 400, 490 445, 465 495 C440 545, 475 575, 450 625 C425 675, 370 660, 345 615 C320 570, 290 525, 280 460 C270 395, 325 345, 370 300Z" fill="url(#blob-3d)" filter="url(#blob-shadow)"/>
-            <!-- Highlight reflection -->
-            <ellipse cx="400" cy="370" rx="55" ry="40" fill="rgba(255,255,255,0.12)" transform="rotate(-20 400 370)"/>
-            <!-- Smaller accent blob overlapping -->
-            <path d="M430 350 C465 325, 510 340, 505 390 C500 440, 465 475, 452 510 C439 545, 415 530, 405 495 C395 460, 395 375, 430 350Z" fill="url(#blob-3d-sm)"/>
-            <!-- Drip origin — thickened transition from blob to stream -->
-            <ellipse cx="448" cy="625" rx="14" ry="20" fill="url(#blob-3d-sm)"/>
-        </svg>
+        <div class="pixel-drip pixel-drip-hero" id="pixel-drip-hero" aria-hidden="true"></div>
         <div class="hero-content">
             <p class="hero-tagline" id="hero-tagline">CONCEPT &middot; GRAPHICS &middot; PRINT</p>
             <h1 id="hero-title">CREATIVE FOR YOU!</h1>
@@ -351,38 +322,10 @@
                     <p>Whether for project days or your design commission:<br><a href="#contact" class="about-cta">Get in touch with RALLIES!</a></p>
                 </div>
             </div>
+            <!-- Pixel-art divider, replaces the old paint-drip tail -->
+            <div class="pixel-drip pixel-drip-divider" id="pixel-drip-divider" aria-hidden="true"></div>
         </div>
     </section>
-
-    <!-- Orange paint drip running from hero blob to footer -->
-    <div class="paint-drip" aria-hidden="true">
-        <svg viewBox="0 0 60 2000" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="drip-grad" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stop-color="#9A2E0E"/>
-                    <stop offset="35%" stop-color="#E15226"/>
-                    <stop offset="65%" stop-color="#F4814A"/>
-                    <stop offset="100%" stop-color="#B8391A"/>
-                </linearGradient>
-                <filter id="drip-texture">
-                    <feTurbulence type="fractalNoise" baseFrequency="0.015 0.15" numOctaves="3" seed="5" result="noise"/>
-                    <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G"/>
-                </filter>
-            </defs>
-            <!-- Main drip body — organic flowing path -->
-            <path d="M32 0 C34 40, 28 80, 30 140 C32 200, 36 250, 33 320 C30 390, 28 420, 31 500 C34 580, 29 640, 30 720 C31 800, 35 860, 32 940 C29 1020, 33 1080, 31 1160 C29 1240, 34 1300, 32 1380 C30 1460, 28 1520, 30 1600 C32 1680, 35 1740, 33 1800 C31 1860, 29 1920, 30 2000" stroke="url(#drip-grad)" stroke-width="18" fill="none" stroke-linecap="round" filter="url(#drip-texture)"/>
-            <!-- Thin highlight along the drip -->
-            <path d="M28 0 C30 40, 24 80, 26 140 C28 200, 32 250, 29 320 C26 390, 24 420, 27 500 C30 580, 25 640, 26 720 C27 800, 31 860, 28 940 C25 1020, 29 1080, 27 1160 C25 1240, 30 1300, 28 1380 C26 1460, 24 1520, 26 1600 C28 1680, 31 1740, 29 1800 C27 1860, 25 1920, 26 2000" stroke="rgba(255,255,255,0.15)" stroke-width="4" fill="none" stroke-linecap="round"/>
-            <!-- Occasional drip bulges for paint effect -->
-            <ellipse cx="30" cy="280" rx="14" ry="18" fill="#E15226" opacity="0.9"/>
-            <ellipse cx="31" cy="650" rx="11" ry="14" fill="#D44820" opacity="0.85"/>
-            <ellipse cx="29" cy="1100" rx="12" ry="16" fill="#E15226" opacity="0.9"/>
-            <ellipse cx="30" cy="1550" rx="10" ry="13" fill="#D44820" opacity="0.85"/>
-            <!-- Droplet at the bottom -->
-            <ellipse cx="30" cy="1970" rx="13" ry="16" fill="#E15226"/>
-            <ellipse cx="27" cy="1964" rx="4" ry="5" fill="rgba(255,255,255,0.15)"/>
-        </svg>
-    </div>
 
     <footer class="footer">
         <div class="container">

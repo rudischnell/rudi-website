@@ -174,6 +174,45 @@ window.addEventListener('pageshow', function(e) {
     window.addEventListener('resize', fitHeroTitle);
 })();
 
+// Pixel-art motif (RALLIES Design System) — replaces the old paint-drip/blob.
+// Sparse, hand-placed orange squares; deterministic per seed so layout stays
+// stable across re-renders.
+(function() {
+    var RAMP = ['#F4814A', '#E15226', '#D44820', '#9A2E0E'];
+
+    function rnd(i, seed) {
+        var x = Math.sin((i + 1) * seed * 12.9898) * 43758.5453;
+        return x - Math.floor(x);
+    }
+
+    function renderPixelDrip(el, count, unit, width, height, seed) {
+        if (!el) return;
+        el.style.width = width + 'px';
+        el.style.height = height + 'px';
+        for (var k = 0; k < count; k++) {
+            var left = Math.round(rnd(k + 3, seed) * (width - unit));
+            var startTop = Math.round(rnd(k + 21, seed) * height * 0.35);
+            var r = rnd(k + 40, seed);
+            var color = r < 0.35 ? RAMP[0] : r < 0.8 ? RAMP[1] : RAMP[2];
+            var delay = (rnd(k + 55, seed) * 3.4).toFixed(2);
+            var dur = (4.2 + rnd(k + 65, seed) * 2.4).toFixed(2);
+            var sq = document.createElement('span');
+            sq.className = 'pixel-sq';
+            sq.style.left = left + 'px';
+            sq.style.top = startTop + 'px';
+            sq.style.width = unit + 'px';
+            sq.style.height = unit + 'px';
+            sq.style.background = color;
+            sq.style.animationDuration = dur + 's';
+            sq.style.animationDelay = delay + 's';
+            el.appendChild(sq);
+        }
+    }
+
+    renderPixelDrip(document.getElementById('pixel-drip-hero'), 9, 22, 220, 380, 7);
+    renderPixelDrip(document.getElementById('pixel-drip-divider'), 7, 14, 300, 90, 11);
+})();
+
 // Service cards: expand/collapse + pre-select contact subject
 (function() {
     var cards = document.querySelectorAll('.service-card[data-subject]');
